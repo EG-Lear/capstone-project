@@ -25,7 +25,8 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #dfca12;
+  margin-right: 10px;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +36,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Centered {
+  text-align: center;
+  list-style-position: inside;
+}
+
+.Resize {
+  max-width: 5%;
+  max-height: 5%;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.RecoPics {
+  max-width: 40%;
+  max-height: 40%;
+}
+
+.RecoList{
+  list-style: none;
 }

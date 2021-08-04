@@ -47,7 +47,6 @@ function App() {
   
   return (
     <div className="App">
-      <h1>Hello</h1>
       <NavBar loggedIn={loggedIn} logout={logoutUser}/>
       <Switch>
         <Route exact path='/' render={() => <Home loggedIn={loggedIn} loginUser={loginUser} user={user}/>}/>

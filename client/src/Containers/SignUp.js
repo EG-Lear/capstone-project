@@ -27,7 +27,7 @@ const SignUp = ({loginUser}) => {
         body: JSON.stringify({
           username: userName, 
           password: password,
-          passwordConfirmation: passwordConfirmation
+          password_confirmation: passwordConfirmation
         })
       })
       .then(res => res.json())
