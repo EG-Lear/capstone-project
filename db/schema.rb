@@ -17,7 +17,12 @@ ActiveRecord::Schema.define(version: 2021_08_04_160536) do
 
   create_table "events", force: :cascade do |t|
     t.string "name"
-    t.integer "budget"
+    t.integer "total_budget"
+    t.integer "available_budget"
+    t.integer "venue_capacity"
+    t.integer "head_count"
+    t.string "location"
+    t.string "date"
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

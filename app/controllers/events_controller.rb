@@ -23,7 +23,8 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.permit(:name, :total_budget)
+    defaults = { user_id: session[:user_id]}
+    params.permit(:name, :total_budget, :date).reverse_merge(defaults)
   end
 
   def find_user

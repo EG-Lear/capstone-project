@@ -29,16 +29,34 @@ const Event = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    fetch('/events', {
-      method: 'POST', 
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: name,
-        budget: budget
+    if (dateSelected === false) {
+      fetch('/events', {
+        method: 'POST', 
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: name,
+          total_budget: budget
+        })
       })
-    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+    } else {
+      fetch('/events', {
+        method: 'POST', 
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: name,
+          total_budget: budget,
+          date: date
+        })
+      })
+      .then(res => res.json())
+      .then(data => console.log(data))
+    }
   }
 
   const handleChange = (event) => {
@@ -96,6 +114,7 @@ const Event = () => {
           </select>
           <br/>
           {renderDateInput()}
+          <button>Create</button>
         </form>
       </div>
     )
