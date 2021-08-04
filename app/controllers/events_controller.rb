@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   end
   
   def index
-    event = find_user.events
+    event = find_user.event
     render json: event
   end
   

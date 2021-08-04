@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Login from '../Containers/Login'
+import Event from '../Containers/Event'
 
 const Home = ({loggedIn, loginUser, user}) => {
  
@@ -17,6 +18,7 @@ const Home = ({loggedIn, loginUser, user}) => {
     return (
       <div>
         <h2>Weclome {user}</h2>
+        <Event />
       </div>
     )
   }
