@@ -5,7 +5,8 @@ const Event = () => {
   const [eventStatus, setEventStatus] = useState(true)
   const [name, setName] = useState('')
   const [budget, setBudget] = useState('')
-  const [venueCapacity, setVenueCapacity] = useState('')
+  const [dateSelected, setDateSelected] = useState(false)
+  const [date, setDate] = useState('')
 
   useEffect(() => {
     fetch('/events')
@@ -35,8 +36,7 @@ const Event = () => {
       },
       body: JSON.stringify({
         name: name,
-        budget: budget,
-        venue_capactiy: venueCapacity
+        budget: budget
       })
     })
   }
@@ -46,15 +46,36 @@ const Event = () => {
       setName(event.target.value)
     } else if (event.target.id === 'B') {
       setBudget(event.target.value)
-    } else if (event.target.id === 'C') {
-      setVenueCapacity(event.target.value)
+    } else if (event.target.id === 'D') {
+      setDate(event.target.value)
+    }
+  }
+
+  const handleSelect = (event) => {
+    // console.log(event.target.value)
+    if (event.target.value === 'false') {
+      setDateSelected(false)
+      setDate('')
+    } else if (event.target.value === 'true') {
+      setDateSelected(true)
+    }
+  }
+
+  const renderDateInput = () => {
+    if (dateSelected === true) {
+      return(
+        <div>
+          <label>When is the big day? </label>
+          <input id={'D'} value={date} onChange={handleChange}></input>
+        </div>
+      )
     }
   }
 
   if (eventStatus === true) {
     return (
       <div>
-
+        <h4>Your event exists</h4>
       </div>
     )
   } else {
@@ -68,8 +89,13 @@ const Event = () => {
           <label>What budget are you working with? </label>
           <input id={'B'} value={budget} onChange={handleChange}></input>
           <br/>
-          <label>How many people does your venue hold? </label>
-          <input id={'C'} value={venueCapacity} onChange={handleChange}></input>
+          <label>Have you already decided on a day? </label>
+          <select onChange={handleSelect}>
+            <option key={'no'} value={false}>No</option>
+            <option key={'yes'} value={true}>Yes</option>
+          </select>
+          <br/>
+          {renderDateInput()}
         </form>
       </div>
     )

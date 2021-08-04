@@ -1,3 +1,3 @@
 class EventSerializer < ActiveModel::Serializer
-  attributes :name, :budget, :venue_capacity
+  attributes :name, :total_budget, :venue_capacity, :available_budget, :head_count, :date, :location
 end
