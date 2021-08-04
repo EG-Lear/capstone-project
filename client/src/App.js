@@ -1,6 +1,7 @@
 import {BrowserRouter as Route, Switch, useHistory} from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import './App.css';
+import './App.css'
+import NavBar from './Components/NavBar'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -45,7 +46,11 @@ function App() {
   
   return (
     <div className="App">
-      <h1>Hello</h1>
+      <Navbar loggedIn={loggedIn} logout={logoutUser}/>
+      <Switch>
+        <Route exact path='/' render={() => <Home loggedIn={loggedIn} loginUser={loginUser} user={user}/>}/>
+        <Route exact path='/signup' render={() => <Signup loginUser={loginUser}/>}/>
+      </Switch>
     </div>
   )
 }
