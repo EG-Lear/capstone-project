@@ -20,7 +20,8 @@ const Event = () => {
             alert(data.errors)
           } else {
             console.log(data)
-            setEvent(data) 
+            setEvent(data)
+            setEventStatus(true) 
           }
         })
       }
@@ -90,12 +91,57 @@ const Event = () => {
     }
   }
 
+  const renderDate = () => {
+    let xDate = event.date
+    let xLocation = event.location
+    if (xDate === null) {
+      xDate = "(the date has not been set)"
+    }
+    if (xLocation === null) {
+      xLocation = "(location to be determined)"
+    }
+    return (
+      <p>The big day is planned for {xDate} and will be located at {xLocation}.</p>
+    )
+  }
+
+  const renderReceptionCost = () => {
+
+    return (
+      <p>Your reception costs (to be implemented) and you have (TBI) other expenses costing (TBI).</p>
+    )
+  }
+
+  const renderReceptionPeople = () => {
+
+    return (
+      <p>You are inviting (TBI) to the reception which will start at (TBI) and located at (TBI).</p>
+    )
+  }
+
+  const renderPeople = () => {
+    let xCount = event.head_count
+    let xCapacity = event.venue_capacity
+    if (xCount === null) {
+      xCount = "(people have not yet been invited)"
+    }
+    if (xCapacity === null) {
+      xCapacity = "(a maximum capacity has not been set)"
+    }
+    return (
+      <p>The total number of people you have invited to the wedding is {xCount} and you have a max capacity of {xCapacity}.</p>
+    )
+  }
+
   if (eventStatus === true) {
     return (
       <div>
         <h4>{event.name}</h4>
-        <br/>
-        <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget} left to spend.</p>
+        {renderDate()}
+        <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget}$ left to spend.</p>
+        {renderPeople()}
+        {renderReceptionCost()}
+        {renderReceptionPeople()}
       </div>
     )
   } else {
