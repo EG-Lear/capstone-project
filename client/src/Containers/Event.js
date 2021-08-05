@@ -93,7 +93,9 @@ const Event = () => {
   if (eventStatus === true) {
     return (
       <div>
-        <h4>Your event exists</h4>
+        <h4>{event.name}</h4>
+        <br/>
+        <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget} left to spend.</p>
       </div>
     )
   } else {
@@ -104,7 +106,7 @@ const Event = () => {
           <label>Name the Occasion </label>
           <input id={'N'} value={name} onChange={handleChange}></input>
           <br/>
-          <label>What budget are you working with? </label>
+          <label>What budget are you working with? $</label>
           <input id={'B'} value={budget} onChange={handleChange}></input>
           <br/>
           <label>Have you already decided on a day? </label>
