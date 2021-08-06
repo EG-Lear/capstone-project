@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react'
 const Attendance = () => {
   const [guestList, setGuestList] = useState({})
   const [listStatus, setListStatus] = useState(false)
-  const [pOneName, setPOneName] = useState('')
-  const [pTwoName, setPTwoName] = useState('')
+  const [guestName, setGuestName] = useState('')
   const [startUp, setStartUp] = useState(false)
+  const [pOneEntered, setPOneEntered] = useState('')
+  const [isBride, setIsBride] = useState(false)
+  const [isGroom, setIsGroom] = useState(true)
   
   useEffect(() => {
     fetch('/attendances')
@@ -14,20 +16,35 @@ const Attendance = () => {
         res.json()
         .then(data => {
           if (data === null) {
-            setListStatus(false)
+            setStartUp(false)
           } else if (data.errors) {
             alert(data.errors)
           } else {
             setGuestList(data)
-            setListStatus(true)
+            setStartUp(true)
+            if (data.guests[0] === undefined) {
+              setListStatus(false)
+            } else if (data.errors) {
+              alert(data.errors)
+            } else {
+              setListStatus(true)
+            }
           }
         })
       }
     })
   }, [])
 
-  const handleChange = () => {
-
+  const handleChange = (event) => {
+    if (event.target.id === 'P') {
+      setGuestName(event.target.value)
+    } else if (event.target.id === 'G') {
+      setIsGroom(true)
+      setIsBride(false)
+    } else if (event.target.id === 'B') {
+      setIsGroom(false)
+      setIsBride(true)
+    }
   }
 
   const handleStartUp = () => {
@@ -51,6 +68,34 @@ const Attendance = () => {
     })
   }
 
+  const handleCouple = (event) => {
+    event.preventDefault()
+    fetch(`/attendances/${guestList.id}/guests`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: guestName,
+        bride: isBride,
+        groom: isGroom
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setGuestList(data)
+        if (pOneEntered === false) {
+          setPOneEntered(true)
+        } else {
+          setListStatus(true)
+        }
+      }
+    })
+  }
+
   if (startUp === false) {
     return (
       <div>
@@ -62,19 +107,29 @@ const Attendance = () => {
     return (
       <div>
         <p>For now lets begin by entering our lucky couple</p>
-        <form>
+        <form onSubmit={handleCouple}>
           <label>Partner 1: </label>
-          <input id={'P1'} value={pOneName} onChange={handleChange}></input>
-          <select></select>
+          <input id={'P'} value={guestName} onChange={handleChange}></input>
+          <select onChange={handleChange}>
+            <option id={'G'}>Groom</option>
+            <option id={'B'}>Bride</option>
+          </select>
           <br/>
-          <label>Partner 2: </label>
-          <input id={'P2'} value={pTwoName} onChange={handleChange}></input>
-          <select></select>
-          <br/>
-          <button></button>
+          <button>Add our first Partner</button>
         </form>
       </div>
     )
+  } else if (pOneEntered === false) {
+    <form onSubmit={handleCouple}>
+      <label>Partner 2: </label>
+      <input id={'P'} value={guestName} onChange={handleChange}></input>
+      <select onChange={handleChange}>
+        <option id={'G'}>Groom</option>
+        <option id={'B'}>Bride</option>
+      </select>
+      <br/>
+      <button>Add the second Partner</button>
+    </form>
   }
 }
 
