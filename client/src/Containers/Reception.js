@@ -11,6 +11,11 @@ const Reception = () => {
   const [dName, setDName] = useState('')
   const [dCost, setDCost] = useState('')
   const [dAmount, setDAmount] = useState('')
+  const [updateForm, setUpdateForm] = useState(false)
+  const [eAmount, setEAmount] = useState('')
+  const [eCost, setECost] = useState('')
+  const [eName, setEName] = useState('')
+  const [eId, setEId] = useState('')
 
   useEffect(() => {
     fetch('/receptions')
@@ -135,15 +140,22 @@ const Reception = () => {
 
   const renderDecorations = () => {
     const lis= []
-    reception.decorations.forEach((deco) => lis.push(<li key={`d${deco.id}`}>{deco.name} <button id={`d-${deco.id}`} onClick={handleDelete}>Delete</button> <p>
-        you are planning to order {deco.amount} at a cost per unit of {deco.cost} for a total cost of {deco.total_cost} 
+    reception.decorations.forEach((deco) => lis.push(<li key={`d${deco.id}`}>{deco.name} <button id={`d-${deco.id}`} onClick={handleDelete}>Delete</button> <button id={`de-${deco.id}`} value={deco.name} onClick={handleEdit}>Edit</button><p>
+        you are planning to order {deco.amount} at a cost per unit of {deco.cost} for a total cost of {deco.total_cost}
       </p></li>))
     return(lis)
   }
 
   const handleDelete = (event) => {
     const i = event.target.id.split('-')[1]
-    fetch(`/decorations/${i}`, {
+    const x = event.target.id.split('-')[0]
+    let choice
+    if (x === 'd') {
+      choice = 'decorations'
+    } else if (x === 'c') {
+      choice = 'concessions'
+    }
+    fetch(`/${choice}/${i}`, {
       method: "DELETE"
     })
     .then(res => res.json())
@@ -154,6 +166,59 @@ const Reception = () => {
         setReception(data)
       }
     })
+  }
+
+  const handleEdit = (event) => {
+    const i = event.target.id.split('-')[1]
+    const x = event.target.id.split('-')[0]
+    setEId(i)
+    setEName(event.target.value)
+    setUpdateForm(true)
+  }
+
+  const renderUpdateForm = () => {
+    if (updateForm === true) {
+      return(
+        <div>
+          <form onSubmit={handleUpdate}>
+            <p>Your are editting {eName}</p>
+            <label>Change amount: </label>
+            <input></input>
+            <br/>
+            <label>Change cost: </label>
+            <input></input>
+            <br/>
+            <button>Change</button>
+          </form>
+          <button onClick={handleCancelUpdate}>Cancel</button>
+        </div>
+      )
+    }
+  }
+
+  const handleUpdate = (event) => {
+    event.preventDefault()
+    const a = parseInt(eAmount)
+    const c = parseInt(eCost)
+    fetch(`/decorations/${eId}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: eName,
+        amount: a,
+        cost: c
+      })
+    })
+  }
+
+  const handleCancelUpdate = () => {
+    setUpdateForm(false)
+    setEName('')
+    setECost('')
+    setEAmount('')
+    setEId('')
   }
 
   if (recepStatus === false) {
@@ -175,6 +240,7 @@ const Reception = () => {
     return (
       <div>
         <p>Your Reception is currently planned for {reception.time} at {reception.location}.</p>
+        {renderUpdateForm()}
         <ul>
           <p>Concessions</p>
           {renderFood()}
