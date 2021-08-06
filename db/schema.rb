@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_102047) do
     t.boolean "invited"
     t.boolean "bridesmaid"
     t.boolean "groomsmen"
-    t.boolean "bridge"
+    t.boolean "bride"
     t.boolean "groom"
     t.boolean "family"
     t.datetime "created_at", precision: 6, null: false

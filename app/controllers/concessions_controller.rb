@@ -5,9 +5,9 @@ class ConcessionsController < ApplicationController
 
   def create
     concession = Concession.create(concessions_params)
-    reception = find_reception
     if concession.valid?
       calculate_reception_cost
+      reception = find_reception
       render json: reception, status: :created
     else
       render json: { errors: concession.errors.full_messages }

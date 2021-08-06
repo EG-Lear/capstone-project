@@ -5,9 +5,9 @@ class DecorationsController < ApplicationController
 
   def create
     decoration = Decoration.create(decorations_params)
-    reception = find_reception
     if decoration.valid?
       calculate_reception_cost
+      reception = find_reception
       render json: reception, status: :created
     else
       render json: { errors: decoration.errors.full_messages }

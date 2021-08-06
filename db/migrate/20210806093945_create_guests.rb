@@ -7,7 +7,7 @@ class CreateGuests < ActiveRecord::Migration[6.1]
       t.boolean :invited
       t.boolean :bridesmaid
       t.boolean :groomsmen
-      t.boolean :bridge
+      t.boolean :bride
       t.boolean :groom
       t.boolean :family
 

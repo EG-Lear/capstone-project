@@ -1,3 +1,3 @@
 class AttendanceSerializer < ActiveModel::Serializer
-  attributes :id, :guests
+  attributes :id, :invited, :guests
 end

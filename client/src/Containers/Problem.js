@@ -6,7 +6,6 @@ const Attendance = () => {
   const [listStatus, setListStatus] = useState(false)
   const [isBride, setIsBride] = useState(false)
   const [isGroom, setIsGroom] = useState(true)
-  const [pOneEntered, setPOneEntered] = useState(false)
 
   useEffect(() => {
     fetch('/attendances')
@@ -14,7 +13,7 @@ const Attendance = () => {
       if (res.ok) {
         res.json()
         .then(data => {
-          console.log(data.invited > 2)
+          console.log(data)
           if (data === null) {
             setListStatus(false)
           } else if (data.errors) {
@@ -23,14 +22,10 @@ const Attendance = () => {
             console.log("here")
             setGuestList(data)
             setListStatus(true)
-            if (data.invited >= 2) {
-              setPOneEntered(true)
-            }
           }
         })
       }
     })
-    .then(data => setGuestList(data))
   }, [])
 
   const handleChange = (event) => {
@@ -88,48 +83,18 @@ const Attendance = () => {
     })
   }
 
-  const renderInvitedGuests = () => {
-    const lis = []
-    if (guestList) {
-      guestList.guests.forEach((guest) => {
-        if (guest.invited === true) {
-          lis.push(<li key={`gu${guest.id}`}>{guest.name} <button id={`gu-${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`gue-${guest.id}`} value={guest.name} onClick={handleEdit}>Edit</button><p>
-        </p></li>)
-        }
-      })
-    }
-    return(lis)
-  }
-
-  const renderNotInvitedGuests = () => {
-    const lis = []
-    if (guestList) {
-      guestList.guests.forEach((guest) => {
-        if (guest.invited === false) {
-          lis.push(<li key={`gu${guest.id}`}>{guest.name} <button id={`gu-${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`gue-${guest.id}`} value={guest.name} onClick={handleEdit}>Edit</button><p>
-        </p></li>)
-        }
-      })
-    }
-    return(lis)
-  }
-
-  const handleEdit = () => {
-
-  }
-
-  const handleDelete = () => {
-
-  }
-
-  if (listStatus === false) {
+  if (listStatus === true) {
     return (
-      <div>
-        <h4>Lets get started planning your guest list!</h4>
-      <button onClick={handleStartUp}>Start!</button>
+    <div>
+      <p>couple completed</p>
     </div>
     )
-  } else if (pOneEntered === false) {
+  } else if (listStatus === false) {
+      <div>
+        <h4>Lets get started planning your guest list!</h4>
+        <button onClick={handleStartUp}>Start!</button>
+      </div>
+  } else {
     return (
       <div>
         <p>For now we recommend you begin by entering the lucky couple</p>
@@ -143,20 +108,6 @@ const Attendance = () => {
           <br/>
           <button>Add Partner</button>
         </form>
-      </div>
-    ) 
-  } else {
-    return(
-      <div>
-        <p>couple completed</p>
-        <ul>
-          <p>Invited</p>
-          {renderInvitedGuests()}
-        </ul>
-        <ul>
-          <p>Not Invited</p>
-          {renderNotInvitedGuests()}
-        </ul>
       </div>
     )
   }
