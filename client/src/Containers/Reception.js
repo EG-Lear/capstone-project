@@ -135,8 +135,25 @@ const Reception = () => {
 
   const renderDecorations = () => {
     const lis= []
-    reception.decorations.forEach((deco, i) => lis.push(<li></li>))
+    reception.decorations.forEach((deco) => lis.push(<li key={`d${deco.id}`}>{deco.name} <button id={`d-${deco.id}`} onClick={handleDelete}>Delete</button> <p>
+        you are planning to order {deco.amount} at a cost per unit of {deco.cost} for a total cost of {deco.total_cost} 
+      </p></li>))
     return(lis)
+  }
+
+  const handleDelete = (event) => {
+    const i = event.target.id.split('-')[1]
+    fetch(`/decorations/${i}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setReception(data)
+      }
+    })
   }
 
   if (recepStatus === false) {
@@ -159,9 +176,11 @@ const Reception = () => {
       <div>
         <p>Your Reception is currently planned for {reception.time} at {reception.location}.</p>
         <ul>
+          <p>Concessions</p>
           {renderFood()}
         </ul>
         <ul>
+          <p>Decorations</p>
           {renderDecorations()}
         </ul>
         <form onSubmit={handleFood}>

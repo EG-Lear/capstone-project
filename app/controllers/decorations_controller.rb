@@ -4,13 +4,13 @@ class DecorationsController < ApplicationController
   before_action :authorize
 
   def index
-    decorations = find_user.reception.decorations.all
+    decorations = find_reception.decorations.all
     render json: decorations
   end
 
   def create
     decoration = Decoration.create(decorations_params)
-    reception = find_user.reception
+    reception = find_reception
     if decoration.valid?
       render json: reception, status: :created
     else
@@ -20,16 +20,27 @@ class DecorationsController < ApplicationController
 
   def update
   end
+  
+  def destroy
+    decoration = Decoration.find(params[:id])
+    decoration.destroy
+    reception = find_reception
+    render json: reception
+  end
 
   private
+
+  def determine_reception_cost
+    
+  end
 
   def decorations_params
     defaults = { reception_id: User.find(session[:user_id]).reception.id, total_cost: params[:amount]*params[:cost] }
     params.permit(:name, :cost, :amount).reverse_merge(defaults)
   end
 
-  def find_user
-    User.find(session[:user_id])
+  def find_reception
+    User.find(session[:user_id]).reception
   end
 
   def record_not_found
