@@ -7,7 +7,8 @@ class CreateEvents < ActiveRecord::Migration[6.1]
       t.integer :venue_capacity
       t.integer :head_count
       t.string :location
-      t.string :date
+      t.date :date
+      t.time :time
       t.integer :user_id
 
       t.timestamps

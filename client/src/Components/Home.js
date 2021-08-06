@@ -17,8 +17,7 @@ const Home = ({loggedIn, loginUser, user}) => {
   } else if (loggedIn === true) {
     return (
       <div>
-        <h2>Weclome {user}</h2>
-        <Event />
+        <Event user={user}/>
       </div>
     )
   }

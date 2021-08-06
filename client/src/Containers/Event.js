@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const Event = () => {
+const Event = ({user}) => {
   const [event, setEvent] = useState({})
   const [eventStatus, setEventStatus] = useState(true)
   const [name, setName] = useState('')
@@ -147,6 +147,7 @@ const Event = () => {
   } else {
     return (
       <div>
+        <h2>Welcome {user}</h2>
         <h3>Thank you for choosing EasyWed to plan your big day. To get started please enter some initial information</h3>
         <form onSubmit={handleSubmit}>
           <label>Name the Occasion </label>

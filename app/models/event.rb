@@ -3,6 +3,8 @@ class Event < ApplicationRecord
   validates :total_budget, presence: true
 
   belongs_to :user
-  # has_many :guests
+  has_one :reception
+  # has_one :guest_list
+  # has_many :guests, through: :guest_list
   # has_many :expenses
 end
