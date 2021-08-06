@@ -16,6 +16,7 @@ const Reception = () => {
   const [eCost, setECost] = useState('')
   const [eName, setEName] = useState('')
   const [eId, setEId] = useState('')
+  const [path, setPath] = useState('')
 
   useEffect(() => {
     fetch('/receptions')
@@ -53,7 +54,11 @@ const Reception = () => {
       setFAmount(event.target.value)
     } else if (event.target.id === 'FC') {
       setFCost(event.target.value)
-    }
+    } else if (event.target.id === 'EA') {
+      setEAmount(event.target.value)
+    } else if (event.target.id === 'EC') {
+      setECost(event.target.value)
+    } 
   }
 
   const handleSubmit = (event) => {
@@ -173,6 +178,7 @@ const Reception = () => {
     const x = event.target.id.split('-')[0]
     setEId(i)
     setEName(event.target.value)
+    setPath(x)
     setUpdateForm(true)
   }
 
@@ -183,10 +189,10 @@ const Reception = () => {
           <form onSubmit={handleUpdate}>
             <p>Your are editting {eName}</p>
             <label>Change amount: </label>
-            <input></input>
+            <input id={'EA'} value={eAmount} onChange={handleChange}></input>
             <br/>
             <label>Change cost: </label>
-            <input></input>
+            <input id={'EC'} value={eCost} onChange={handleChange}></input>
             <br/>
             <button>Change</button>
           </form>
@@ -200,7 +206,13 @@ const Reception = () => {
     event.preventDefault()
     const a = parseInt(eAmount)
     const c = parseInt(eCost)
-    fetch(`/decorations/${eId}`, {
+    let choice
+    if (path === 'de') {
+      choice = "decorations"
+    } else if (path === 'ce') {
+      choice = "concessions"
+    }
+    fetch(`/${choice}/${eId}`, {
       method: 'PATCH',
       headers: {
         "Content-Type": "application/json"
@@ -211,6 +223,20 @@ const Reception = () => {
         cost: c
       })
     })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setReception(data)
+        setUpdateForm(false)
+        setEName('')
+        setECost('')
+        setEAmount('')
+        setEId('')
+        setPath('')
+      }
+    })
   }
 
   const handleCancelUpdate = () => {
@@ -219,6 +245,7 @@ const Reception = () => {
     setECost('')
     setEAmount('')
     setEId('')
+    setPath('')
   }
 
   if (recepStatus === false) {

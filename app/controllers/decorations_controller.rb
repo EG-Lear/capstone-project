@@ -19,6 +19,14 @@ class DecorationsController < ApplicationController
   end
 
   def update
+    decoration = Decoration.find(params[:id])
+    if decoration.nil?
+      render json: { errors: "Decoration not found" }
+    else
+      decoration.update(decorations_params)
+      reception = find_reception
+      render json: reception
+    end
   end
   
   def destroy
@@ -30,8 +38,9 @@ class DecorationsController < ApplicationController
 
   private
 
-  def determine_reception_cost
-    
+  def calculate_reception_cost
+    reception = find_reception
+    cost_value = reception.decorations.sum(:total_cost) + reception.concession.sum(:total_cost)
   end
 
   def decorations_params
