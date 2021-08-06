@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_051829) do
   end
 
   create_table "receptions", force: :cascade do |t|
-    t.time "time"
+    t.string "time"
     t.integer "total_cost"
     t.integer "event_id"
     t.string "location"

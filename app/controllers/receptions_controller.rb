@@ -13,7 +13,7 @@ class ReceptionsController < ApplicationController
     if reception.valid?
       render json: reception, status: :created
     else
-      render json: { errrors: reception.errors.full_messages }
+      render json: { errors: reception.errors.full_messages }
     end
   end
 
