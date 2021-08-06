@@ -112,10 +112,10 @@ const Event = () => {
     )
   }
 
-  const renderReceptionPeople = () => {
+  const renderReceptionDate = () => {
 
     return (
-      <p>You are inviting (TBI) to the reception which will start at (TBI) and located at (TBI).</p>
+      <p>The reception is scheduled to start at (TBI) and located at (TBI).</p>
     )
   }
 
@@ -141,7 +141,7 @@ const Event = () => {
         <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget}$ left to spend.</p>
         {renderPeople()}
         {renderReceptionCost()}
-        {renderReceptionPeople()}
+        {renderReceptionDate()}
       </div>
     )
   } else {

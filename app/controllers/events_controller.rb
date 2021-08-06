@@ -8,7 +8,7 @@ class EventsController < ApplicationController
   
   def index
     event = find_user.event
-    render json: event
+    render json: event, include: :reception
   end
   
   def create

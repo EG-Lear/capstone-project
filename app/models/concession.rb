@@ -1,0 +1,2 @@
+class Concession < ApplicationRecord
+end

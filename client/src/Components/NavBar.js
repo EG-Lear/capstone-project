@@ -14,7 +14,7 @@ const NavBar = ({loggedIn, logout}) => {
     return (
       <div>
         <NavLink className='App-link' to='/'>Home</NavLink>
-        <NavLink className='App0link' to='/receptions'>Reception</NavLink>
+        <NavLink className='App-link' to='/receptions'>Reception</NavLink>
         <button onClick={logout}>Log Out</button>
       </div>
     )
