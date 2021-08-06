@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_050912) do
     t.string "name"
     t.string "cost"
     t.integer "amount"
+    t.integer "total_cost"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

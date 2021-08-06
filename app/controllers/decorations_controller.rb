@@ -3,11 +3,6 @@ class DecorationsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   before_action :authorize
 
-  def index
-    decorations = find_reception.decorations.all
-    render json: decorations
-  end
-
   def create
     decoration = Decoration.create(decorations_params)
     reception = find_reception
@@ -24,6 +19,7 @@ class DecorationsController < ApplicationController
       render json: { errors: "Decoration not found" }
     else
       decoration.update(decorations_params)
+      calculate_reception_cost
       reception = find_reception
       render json: reception
     end
@@ -40,7 +36,8 @@ class DecorationsController < ApplicationController
 
   def calculate_reception_cost
     reception = find_reception
-    cost_value = reception.decorations.sum(:total_cost) + reception.concession.sum(:total_cost)
+    cost_value = reception.decorations.sum(:total_cost) + reception.concessions.sum(:total_cost)
+    reception.update(total_cost: cost_value)
   end
 
   def decorations_params
