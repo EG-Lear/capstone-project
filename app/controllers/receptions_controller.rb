@@ -5,7 +5,7 @@ class ReceptionsController < ApplicationController
 
   def index
     reception = find_user.reception
-    render json: reception, include: :event
+    render json: reception
   end
 
   def create

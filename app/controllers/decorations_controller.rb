@@ -4,14 +4,15 @@ class DecorationsController < ApplicationController
   before_action :authorize
 
   def index
-    decoration = find_user.reception.decorations.all
-    render json: decoration
+    decorations = find_user.reception.decorations.all
+    render json: decorations
   end
 
   def create
     decoration = Decoration.create(decorations_params)
+    reception = find_user.reception
     if decoration.valid?
-      render json: decoration, status: :created
+      render json: reception, status: :created
     else
       render json: { errors: decoration.errors.full_messages }
     end

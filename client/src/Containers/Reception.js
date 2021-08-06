@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { render } from 'react-dom'
 
 const Reception = () => {
   const [location, setLocation] = useState('')
@@ -12,8 +11,6 @@ const Reception = () => {
   const [dName, setDName] = useState('')
   const [dCost, setDCost] = useState('')
   const [dAmount, setDAmount] = useState('')
-  const [food, setFood] = useState({})
-  const [decorations, setDecorations] = useState({})
 
   useEffect(() => {
     fetch('/receptions')
@@ -99,10 +96,7 @@ const Reception = () => {
       if (data.errors) {
         alert(data.errors)
       } else {
-        setFName('')
-        setFCost('')
-        setFAmount('')
-        setFood(data)
+        setReception(data)
       }
     })
   }
@@ -128,22 +122,21 @@ const Reception = () => {
       if (data.errors) {
         alert(data.errors)
       } else {
-        setDName('')
-        setDCost('')
-        setDAmount('')
-        setDecorations(data)
+        setReception(data)
       }
     })
   }
 
   const renderFood = () => {
     const lis = []
-    
+
 
   }
 
   const renderDecorations = () => {
     const lis= []
+    reception.decorations.forEach((deco, i) => lis.push(<li></li>))
+    return(lis)
   }
 
   if (recepStatus === false) {
