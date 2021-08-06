@@ -119,17 +119,39 @@ const Event = ({user}) => {
     )
   }
 
-  const renderReceptionCost = () => {
-
+  const renderAllCost = () => {
+    let rCost
+    if (event.reception) {
+      rCost = event.reception.total_cost
+      if (rCost === null) {
+        rCost = '(reception has not been given any budget)'
+      }
+    } else {
+      rCost = null
+    }
     return (
-      <p>Your reception costs (to be implemented) and you have (TBI) other expenses costing (TBI).</p>
+      <p>Your reception costs {rCost} and you have (TBI) other expenses costing (TBI).</p>
     )
   }
 
   const renderReceptionDate = () => {
-
+    let rTime
+    let rLocation
+    if (event.reception) {
+      rTime = event.reception.time
+      rLocation = event.reception.location
+      if (rTime === null) {
+        rTime = '(no time has been set)'
+      }
+      if (rLocation === null) {
+        rLocation = '(no location has been set)'
+      }
+    } else {
+      rTime = null
+      rLocation = null
+    }
     return (
-      <p>The reception is scheduled to start at (TBI) and located at (TBI).</p>
+      <p>The reception is scheduled to start at {rTime} and located at {rLocation}.</p>
     )
   }
 
@@ -154,7 +176,7 @@ const Event = ({user}) => {
         {renderDate()}
         <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget}$ left to spend.</p>
         {renderPeople()}
-        {renderReceptionCost()}
+        {renderAllCost()}
         {renderReceptionDate()}
       </div>
     )

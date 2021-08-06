@@ -7,6 +7,7 @@ class ConcessionsController < ApplicationController
     concession = Concession.create(concessions_params)
     reception = find_reception
     if concession.valid?
+      calculate_reception_cost
       render json: reception, status: :created
     else
       render json: { errors: concession.errors.full_messages }
@@ -16,9 +17,10 @@ class ConcessionsController < ApplicationController
   def update
     concession = Concession.find(params[:id])
     if concession.nil?
-      render json: { errors: "Decoration not found" }
+      render json: { errors: "Concession not found" }
     else
       concession.update(concessions_params)
+      calculate_reception_cost
       reception = find_reception
       render json: reception
     end
@@ -27,6 +29,7 @@ class ConcessionsController < ApplicationController
   def destroy
     concession = Concession.find(params[:id])
     concession.destroy
+    calculate_reception_cost
     reception = find_reception
     render json: reception
   end
@@ -36,6 +39,12 @@ class ConcessionsController < ApplicationController
   def concessions_params
     defaults = { reception_id: User.find(session[:user_id]).reception.id, total_cost: params[:amount]*params[:cost] }
     params.permit(:name, :cost, :amount).reverse_merge(defaults)
+  end
+
+  def calculate_reception_cost
+    reception = find_reception
+    cost_value = reception.decorations.sum(:total_cost) + reception.concessions.sum(:total_cost)
+    reception.update(total_cost: cost_value)
   end
 
   def find_reception

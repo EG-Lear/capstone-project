@@ -11,6 +11,7 @@ class ReceptionsController < ApplicationController
   def create
     reception = Reception.create(reception_params)
     if reception.valid?
+      calculate_reception_cost
       render json: reception, status: :created
     else
       render json: { errors: reception.errors.full_messages }
@@ -18,6 +19,13 @@ class ReceptionsController < ApplicationController
   end
 
   def update
+    reception = Reception.find(params[:id])
+    if reception.nil?
+      render json: { errors: "Reception not found" }
+    else
+      reception.update(reception_params)
+      render json: reception
+    end
   end
 
   private
@@ -25,6 +33,12 @@ class ReceptionsController < ApplicationController
   def reception_params
     defaults = { event_id: User.find(session[:user_id]).event.id }
     params.permit(:time, :total_cost, :location).reverse_merge(defaults)
+  end
+
+  def calculate_reception_cost
+    reception = find_user.reception
+    cost_value = reception.decorations.sum(:total_cost) + reception.concessions.sum(:total_cost)
+    reception.update(total_cost: cost_value)
   end
 
   def find_user

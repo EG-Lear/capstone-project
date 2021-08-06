@@ -17,6 +17,9 @@ const Reception = () => {
   const [eName, setEName] = useState('')
   const [eId, setEId] = useState('')
   const [path, setPath] = useState('')
+  const [recepUpdate, setRecepUpdate] = useState(false)
+  const [rTime, setRTime] = useState('')
+  const [rLocation, setRLocation] = useState('')
 
   useEffect(() => {
     fetch('/receptions')
@@ -58,7 +61,11 @@ const Reception = () => {
       setEAmount(event.target.value)
     } else if (event.target.id === 'EC') {
       setECost(event.target.value)
-    } 
+    } else if (event.target.id === 'RL') {
+      setRLocation(event.target.value)
+    } else if (event.target.id === 'RT') {
+      setRTime(event.target.value)
+    }
   }
 
   const handleSubmit = (event) => {
@@ -260,6 +267,64 @@ const Reception = () => {
     setPath('')
   }
 
+  const handleRecepUpdate = () => {
+    setRecepUpdate(true)
+    setRTime(reception.time)
+    setRLocation(reception.location)
+  }
+
+  const renderRUpdate = () => {
+    if (recepUpdate === true) {
+      return(
+        <div>               
+          <form onSubmit={handleRUpdate}>
+            <p>Edit Reception</p>
+            <label>Change time: </label>
+            <input id={'RT'} value={rTime} onChange={handleChange}></input>
+            <br/>
+            <label>Change location: </label>
+            <input id={'RL'} value={rLocation} onChange={handleChange}></input>
+            <br/>
+            <button>Change</button>
+          </form>
+          <button onClick={handleRUpdateCancel}>Cancel</button>       
+        </div>
+      )
+    }
+  }
+
+  const handleRUpdate = (event) => {
+    event.preventDefault()
+    fetch(`/receptions/${reception.id}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: reception.name,
+        time: rTime,
+        location: rLocation
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setReception(data)
+        setRecepUpdate(false)
+        setRTime('')
+        setRLocation('')
+      }
+    })
+  }
+
+  const handleRUpdateCancel = () => {
+    setRecepUpdate(false)
+    setRTime('')
+    setRLocation('')
+  }
+
   if (recepStatus === false) {
     return (
       <div>
@@ -278,8 +343,9 @@ const Reception = () => {
   } else {
     return (
       <div>
-        <p>Your Reception is currently planned for {reception.time} at {reception.location} and its total cost is {reception.total_cost}.</p>
+        <p>Your Reception is currently planned for {reception.time} at {reception.location} and its total cost is {reception.total_cost}. <button onClick={handleRecepUpdate}>Change time/location</button></p>
         {renderUpdateForm()}
+        {renderRUpdate()}
         <ul>
           <p>Concessions</p>
           {renderFood()}
