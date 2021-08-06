@@ -4,9 +4,17 @@ class ReceptionsController < ApplicationController
   before_action :authorize
 
   def index
+    reception = find_user.reception
+    render json: reception, include: :event
   end
 
   def create
+    reception = Reception.create(reception_params)
+    if reception.valid?
+      render json: reception, status: :created
+    else
+      render json: { errrors: reception.errors.full_messages }
+    end
   end
 
   def update
@@ -15,8 +23,8 @@ class ReceptionsController < ApplicationController
   private
 
   def reception_params
-    defaults = { event_id: find_user.event.id}
-    params.permit(:time, :date, :total_cost, :location).reverse_merge(defaults)
+    defaults = { event_id: User.find(session[:user_id]).event.id }
+    params.permit(:time, :total_cost, :location).reverse_merge(defaults)
   end
 
   def find_user

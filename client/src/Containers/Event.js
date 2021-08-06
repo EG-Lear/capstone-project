@@ -42,7 +42,14 @@ const Event = ({user}) => {
         })
       })
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => {
+        if (data.errors) {
+          alert(data.errors)
+        } else {
+          setEventStatus(true)
+          setEvent(data)
+        }
+      })
     } else {
       fetch('/events', {
         method: 'POST', 
@@ -56,7 +63,14 @@ const Event = ({user}) => {
         })
       })
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => {
+        if (data.errors) {
+          alert(data.errors)
+        } else {
+          setEventStatus(true)
+          setEvent(data)
+        }
+      })
     }
   }
 

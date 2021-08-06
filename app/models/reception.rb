@@ -1,5 +1,5 @@
 class Reception < ApplicationRecord
-  validates :location, presence: true,
+  validates :location, presence: true
   validates :time, presence: true
 
   belongs_to :event

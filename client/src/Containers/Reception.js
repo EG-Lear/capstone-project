@@ -4,6 +4,7 @@ const Reception = () => {
   const [location, setLocation] = useState('')
   const [time, setTime] = useState('')
   const [reception, setReception] = useState({})
+  const [recepStatus, setRecepStatus] = useState(false)
   const [,] = useState()
 
   useEffect(() => {
@@ -12,10 +13,13 @@ const Reception = () => {
       if (res.ok) {
         res.json()
         .then(data => {
-          if (data.errors) {
+          if (data === null) {
+            setRecepStatus(false)
+          } else if (data.errors) {
             alert(data.errors)
           } else {
             setReception(data)
+            setRecepStatus(true)
           }
         })
       }
@@ -47,12 +51,13 @@ const Reception = () => {
       if (data.errors) {
         alert(data.errors)
       } else {
+        setRecepStatus(true)
         setReception(data)
       }
     })
   }
 
-  if (reception === null) {
+  if (recepStatus === false) {
     return (
       <div>
         <h4>If you have already set up the initial information on the home page you can go ahead and start organizing the reception. </h4>
@@ -70,7 +75,7 @@ const Reception = () => {
   } else {
     return (
       <div>
-
+        <p>Your Reception is currently planned for {reception.time} at {reception.location}.</p>
       </div>
     )
   }

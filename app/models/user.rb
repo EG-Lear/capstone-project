@@ -4,4 +4,5 @@ class User < ApplicationRecord
   has_secure_password
 
   has_one :event
+  has_one :reception, through: :event
 end

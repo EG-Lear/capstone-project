@@ -31,15 +31,15 @@ ActiveRecord::Schema.define(version: 2021_08_05_051829) do
     t.integer "venue_capacity"
     t.integer "head_count"
     t.string "location"
-    t.string "date"
+    t.date "date"
+    t.time "time"
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "receptions", force: :cascade do |t|
-    t.string "date"
-    t.string "time"
+    t.time "time"
     t.integer "total_cost"
     t.integer "event_id"
     t.string "location"
