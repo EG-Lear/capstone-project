@@ -11,16 +11,28 @@ class GuestsController < ApplicationController
       attendance = find_attendance
       render json: attendance, status: :created
     else
-      render json: { errors: attendance.errors.full_messages }
+      render json: { errors: guest.errors.full_messages }
     end
   end
 
   def update
-    calculate_invited
+    guest = Guest.find(params[:id])
+    if guest.nil?
+      render json: { errors: "Guest not found" }
+    else
+      guest.update(guests_params)
+      calculate_invited
+      attendance = find_attendance
+      render json: attendance
+    end
   end
 
   def destroy
+    guest = Guest.find(params[:id])
+    guest.destroy
     calculate_invited
+    attendance = find_attendance
+    render json: attendance
   end
 
   private
@@ -32,8 +44,8 @@ class GuestsController < ApplicationController
   end
 
   def guests_params
-    defaults = { attendance_id: User.find(session[:user_id]).attendance.id, invited: true, plus_one: false}
-    params.permit(:name, :bride, :groom, :family, :bridesmaid, :groomsmen).reverse_merge(defaults)
+    defaults = { attendance_id: User.find(session[:user_id]).attendance.id }
+    params.permit(:name, :bride, :groom, :invited).reverse_merge(defaults)
   end
   
   def find_attendance

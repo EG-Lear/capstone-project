@@ -14,13 +14,11 @@ const Attendance = () => {
       if (res.ok) {
         res.json()
         .then(data => {
-          console.log(data.invited > 2)
           if (data === null) {
             setListStatus(false)
           } else if (data.errors) {
             alert(data.errors)
           } else {
-            console.log("here")
             setGuestList(data)
             setListStatus(true)
             if (data.invited >= 2) {
@@ -42,6 +40,8 @@ const Attendance = () => {
     } else if (event.target.id === 'B') {
       setIsGroom(false)
       setIsBride(true)
+    } else if (event.target.id === 'L') {
+      setGuestName(event.target.value)
     }
   }
 
@@ -61,6 +61,7 @@ const Attendance = () => {
         alert(data.errors)
       } else {
         setGuestList(data)
+        setListStatus(true)
       }
     })
   }
@@ -75,7 +76,8 @@ const Attendance = () => {
       body: JSON.stringify({
         name: guestName,
         bride: isBride,
-        groom: isGroom
+        groom: isGroom,
+        invited: true
       })
     })
     .then(res => res.json())
@@ -84,6 +86,11 @@ const Attendance = () => {
         alert(data.errors)
       } else {
         setGuestList(data)
+        alert("successfully added")
+        setGuestName('')
+        if (data.invited === 2) {
+          setPOneEntered(true)
+        }
       }
     })
   }
@@ -93,7 +100,7 @@ const Attendance = () => {
     if (guestList) {
       guestList.guests.forEach((guest) => {
         if (guest.invited === true) {
-          lis.push(<li key={`gu${guest.id}`}>{guest.name} <button id={`gu-${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`gue-${guest.id}`} value={guest.name} onClick={handleEdit}>Edit</button><p>
+          lis.push(<li key={`${guest.id}`}>{guest.name} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
         </p></li>)
         }
       })
@@ -106,7 +113,7 @@ const Attendance = () => {
     if (guestList) {
       guestList.guests.forEach((guest) => {
         if (guest.invited === false) {
-          lis.push(<li key={`gu${guest.id}`}>{guest.name} <button id={`gu-${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`gue-${guest.id}`} value={guest.name} onClick={handleEdit}>Edit</button><p>
+          lis.push(<li key={`${guest.id}`}>{guest.name} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleInvite}>Invite</button><p>
         </p></li>)
         }
       })
@@ -114,12 +121,91 @@ const Attendance = () => {
     return(lis)
   }
 
-  const handleEdit = () => {
-
+  const handleInvite = (event) => {
+    event.preventDefault()
+    const i = event.target.id
+    const x = event.target.value
+    fetch(`/guests/${i}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: x,
+        invited: true
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setGuestList(data)
+      }
+    })
   }
 
-  const handleDelete = () => {
+  const handleUnInvite = (event) => {
+    event.preventDefault()
+    const i = event.target.id
+    const x = event.target.value
+    fetch(`/guests/${i}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: x,
+        invited: false
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setGuestList(data)
+      }
+    })
+  }
 
+  const handleDelete = (event) => {
+    const i = event.target.id
+    console.log(i)
+    fetch(`/guests/${i}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setGuestList(data)
+      }
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    fetch(`/attendances/${guestList.id}/guests`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: guestName,
+        invited: true
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setGuestList(data)
+        setGuestName('')
+      }
+    })
   }
 
   if (listStatus === false) {
@@ -148,7 +234,7 @@ const Attendance = () => {
   } else {
     return(
       <div>
-        <p>couple completed</p>
+        <p>Your list of guests</p>
         <ul>
           <p>Invited</p>
           {renderInvitedGuests()}
@@ -157,6 +243,13 @@ const Attendance = () => {
           <p>Not Invited</p>
           {renderNotInvitedGuests()}
         </ul>
+        <form onSubmit={handleSubmit}>
+          <p>add new guests</p>
+          <label>Name: </label>
+          <input id={'L'} value={guestName} onChange={handleChange}></input>
+          <br/>
+          <button>Add</button>
+        </form>
       </div>
     )
   }

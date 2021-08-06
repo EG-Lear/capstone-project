@@ -147,8 +147,8 @@ const Event = ({user}) => {
         rLocation = '(no location has been set)'
       }
     } else {
-      rTime = null
-      rLocation = null
+      rTime = '(no time has been set)'
+      rLocation = '(no location has been set)'
     }
     return (
       <p>The reception is scheduled to start at {rTime} and located at {rLocation}.</p>

@@ -59,13 +59,9 @@ ActiveRecord::Schema.define(version: 2021_08_06_102047) do
   create_table "guests", force: :cascade do |t|
     t.string "name"
     t.integer "attendance_id"
-    t.boolean "plus_one"
     t.boolean "invited"
-    t.boolean "bridesmaid"
-    t.boolean "groomsmen"
     t.boolean "bride"
     t.boolean "groom"
-    t.boolean "family"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
