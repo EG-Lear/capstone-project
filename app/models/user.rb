@@ -5,4 +5,5 @@ class User < ApplicationRecord
 
   has_one :event
   has_one :reception, through: :event
+  has_one :guest_list, through: :event
 end
