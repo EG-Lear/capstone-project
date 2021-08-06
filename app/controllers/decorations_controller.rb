@@ -1,0 +1,2 @@
+class DecorationsController < ApplicationController
+end

@@ -4,4 +4,5 @@ class Reception < ApplicationRecord
 
   belongs_to :event
   has_many :concessions
+  has_many :decorations
 end

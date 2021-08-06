@@ -11,8 +11,10 @@ Rails.application.routes.draw do
   resources :events, only: [:show, :create, :index, :update]
   resources :receptions, only: [:show, :index, :create, :update] do
     resources :concessions, only: [:index, :create]
+    resources :decorations, only: [:index, :create]
   end
   resources :concessions, only: [:update, :destroy]
+  resources :decorations, only: [:update, :destroy]
 
   # Routing logic: fallback requests for React Router.
   # Leave this here to help deploy your app later!

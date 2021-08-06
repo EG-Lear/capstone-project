@@ -1,12 +1,12 @@
-class CreateConcessions < ActiveRecord::Migration[6.1]
+class CreateDecorations < ActiveRecord::Migration[6.1]
   def change
-    create_table :concessions do |t|
+    create_table :decorations do |t|
       t.integer :reception_id
       t.string :name
-      t.string :cost
+      t.integer :cost
       t.integer :amount
       t.integer :total_cost
-
+      
       t.timestamps
     end
   end
