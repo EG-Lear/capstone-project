@@ -5,7 +5,7 @@ import NavBar from './Components/NavBar'
 import Home from './Components/Home'
 import SignUp from './Containers/SignUp'
 import Reception from './Containers/Reception'
-import GuestList from './Containers/GuestList'
+import Attendance from './Containers/Attendance'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -54,7 +54,7 @@ function App() {
         <Route exact path='/' render={() => <Home loggedIn={loggedIn} loginUser={loginUser} user={user}/>}/>
         <Route exact path='/signup' render={() => <SignUp loginUser={loginUser}/>}/>
         <Route exact path='/receptions' render={() => <Reception />} />
-        <Route exact path='/guestlist' render={() => <GuestList />} />
+        <Route exact path='/attendances' render={() => <Attendance />} />
       </Switch>
     </div>
   )

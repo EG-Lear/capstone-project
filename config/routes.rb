@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   resources :concessions, only: [:update, :destroy]
   resources :decorations, only: [:update, :destroy]
 
-  resources :guest_lists, only: [:create, :update, :index] do
+  resources :attendances, only: [:create, :index] do
     resources :guests, only: [:create, :index]
   end
   resources :guests, only: [:update, :destroy]

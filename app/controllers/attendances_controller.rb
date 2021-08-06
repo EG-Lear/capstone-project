@@ -1,34 +1,27 @@
-class EventsController < ApplicationController
+class AttendancesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   before_action :authorize
 
-  def show
-  end
-  
   def index
-    event = find_user.event
-    render json: event
+    attendance = User.find(session[:user_id]).attendance
+    render json: attendance
   end
-  
+
   def create
-    event = Event.create(event_params)
-    if event.valid?
-      render json: event, status: :created
+    attendance = Attendance.create(attendance_params)
+    if attendance.valid?
+      render json: attendance, status: :created
     else
-      render json: { errrors: event.errors.full_messages }
+      render json: { errors: attendance.errors.full_messages }
     end
   end
 
   private
 
-  def event_params
-    defaults = { user_id: session[:user_id], available_budget: params[:total_budget]}
-    params.permit(:name, :total_budget, :date).reverse_merge(defaults)
-  end
-
-  def find_user
-    User.find(session[:user_id])
+  def attendance_params
+    defaults = { event_id: User.find(session[:user_id]).event.id, invited: 0}
+    params.permit().reverse_merge(defaults)
   end
 
   def record_not_found
@@ -42,5 +35,4 @@ class EventsController < ApplicationController
   def render_unprocessable_entity_response(invalid)
     render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
   end
-
 end

@@ -4,7 +4,7 @@ class Event < ApplicationRecord
 
   belongs_to :user
   has_one :reception
-  # has_one :guest_list
-  # has_many :guests, through: :guest_list
+  has_one :attendance
+  has_many :guests, through: :attendance
   # has_many :expenses
 end

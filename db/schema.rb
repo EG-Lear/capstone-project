@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_093945) do
+ActiveRecord::Schema.define(version: 2021_08_06_102047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attendances", force: :cascade do |t|
+    t.integer "event_id"
+    t.integer "invited"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "concessions", force: :cascade do |t|
     t.integer "reception_id"
@@ -49,16 +56,9 @@ ActiveRecord::Schema.define(version: 2021_08_06_093945) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "guest_lists", force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "invited"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "guests", force: :cascade do |t|
     t.string "name"
-    t.integer "guest_list_id"
+    t.integer "attendance_id"
     t.boolean "plus_one"
     t.boolean "invited"
     t.boolean "bridesmaid"

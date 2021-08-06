@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const GuestList = () => {
+const Attendance = () => {
   const [guestList, setGuestList] = useState({})
   const [listStatus, setListStatus] = useState(false)
   const [pOneName, setPOneName] = useState('')
@@ -8,7 +8,7 @@ const GuestList = () => {
   const [startUp, setStartUp] = useState(false)
   
   useEffect(() => {
-    fetch('/guest_list')
+    fetch('/attendances')
     .then(res => {
       if (res.ok) {
         res.json()
@@ -31,9 +31,26 @@ const GuestList = () => {
   }
 
   const handleStartUp = () => {
-
+    fetch('/attendances', {
+      method: 'POST', 
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        invited: 0
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setStartUp(true)
+        setGuestList(data)
+      }
+    })
   }
-  
+
   if (startUp === false) {
     return (
       <div>
@@ -61,4 +78,4 @@ const GuestList = () => {
   }
 }
 
-export default GuestList
+export default Attendance
