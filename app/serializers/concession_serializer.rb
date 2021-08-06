@@ -1,3 +1,3 @@
 class ConcessionSerializer < ActiveModel::Serializer
-  attributes :id, :name, :amount, :cost
+  attributes :id, :name, :cost, :total_cost, :amount
 end

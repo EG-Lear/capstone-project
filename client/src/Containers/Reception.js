@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { render } from 'react-dom'
 
 const Reception = () => {
   const [location, setLocation] = useState('')
@@ -11,6 +12,8 @@ const Reception = () => {
   const [dName, setDName] = useState('')
   const [dCost, setDCost] = useState('')
   const [dAmount, setDAmount] = useState('')
+  const [food, setFood] = useState({})
+  const [decorations, setDecorations] = useState({})
 
   useEffect(() => {
     fetch('/receptions')
@@ -75,12 +78,72 @@ const Reception = () => {
     })
   }
 
-  const handleFood = () => {
-    fetch(`/receptions/${reception.id}`)
+  const handleFood = (event) => {
+    event.preventDefault()
+    const a = parseInt(fAmount)
+    const c = parseInt(fCost)
+    fetch(`/receptions/${reception.id}/concessions`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: fName,
+        amount: a,
+        cost: c
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setFName('')
+        setFCost('')
+        setFAmount('')
+        setFood(data)
+      }
+    })
   }
 
-  const handleDeco = () => {
+  const handleDeco = (event) => {
+    event.preventDefault()
+    const a = parseInt(dAmount)
+    const c = parseInt(dCost)
+    fetch(`/receptions/${reception.id}/decorations`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: dName,
+        amount: a,
+        cost: c
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setDName('')
+        setDCost('')
+        setDAmount('')
+        setDecorations(data)
+      }
+    })
+  }
 
+  const renderFood = () => {
+    const lis = []
+    
+
+  }
+
+  const renderDecorations = () => {
+    const lis= []
   }
 
   if (recepStatus === false) {
@@ -103,7 +166,10 @@ const Reception = () => {
       <div>
         <p>Your Reception is currently planned for {reception.time} at {reception.location}.</p>
         <ul>
-
+          {renderFood()}
+        </ul>
+        <ul>
+          {renderDecorations()}
         </ul>
         <form onSubmit={handleFood}>
           <p>You can add items to your menu here.</p>

@@ -1,3 +1,3 @@
 class DecorationSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :name, :cost, :total_cost, :amount
 end

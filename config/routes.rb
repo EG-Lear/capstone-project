@@ -10,8 +10,8 @@ Rails.application.routes.draw do
 
   resources :events, only: [:show, :create, :index, :update]
   resources :receptions, only: [:show, :index, :create, :update] do
-    resources :concessions, only: [:index, :create]
-    resources :decorations, only: [:index, :create]
+    resources :concessions, only: [:create]
+    resources :decorations, only: [:create]
   end
   resources :concessions, only: [:update, :destroy]
   resources :decorations, only: [:update, :destroy]
