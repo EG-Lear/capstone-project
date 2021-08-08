@@ -7,6 +7,10 @@ const Attendance = () => {
   const [isBride, setIsBride] = useState(false)
   const [isGroom, setIsGroom] = useState(true)
   const [pOneEntered, setPOneEntered] = useState(false)
+  const [isBridesmaid, setIsBridesmaid] = useState(false)
+  const [isGroomsmen, setIsGroomsmen] = useState(false)
+  const [isFamily, setIsFamily] = useState(false)
+  const [counter, setCounter] = useState(false)
 
   useEffect(() => {
     fetch('/attendances')
@@ -32,12 +36,13 @@ const Attendance = () => {
   }, [])
 
   const handleChange = (event) => {
+    // console.log(event.target.value)
     if (event.target.id === 'P') {
       setGuestName(event.target.value)
-    } else if (event.target.id === 'G') {
+    } else if (event.target.value === 'Groom') {
       setIsGroom(true)
       setIsBride(false)
-    } else if (event.target.id === 'B') {
+    } else if (event.target.value === 'Bride') {
       setIsGroom(false)
       setIsBride(true)
     } else if (event.target.id === 'L') {
@@ -99,8 +104,17 @@ const Attendance = () => {
     const lis = []
     if (guestList) {
       guestList.guests.forEach((guest) => {
-        if (guest.invited === true) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
+        let tag = null
+        if (guest.bridesmaid) {
+          tag = '(Bridesmaid)'
+        } else if (guest.groomsmen) {
+          tag = '(Groomsmen)'
+        } else if (guest.family) {
+          tag = '(Family)'
+        } 
+        if (guest.groom || guest.bride === true) {
+        } else if (guest.invited === true) {
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
         </p></li>)
         }
       })
@@ -112,8 +126,20 @@ const Attendance = () => {
     const lis = []
     if (guestList) {
       guestList.guests.forEach((guest) => {
+        let tag = null
+        if (guest.groom) {
+          tag = '(Groom)'
+        } else if (guest.bride) {
+          tag = '(Bride)'
+        } else if (guest.bridesmaid) {
+          tag = '(Bridesmaid)'
+        } else if (guest.groomsmen) {
+          tag = '(Groomsmen)'
+        } else if (guest.family) {
+          tag = '(Family)'
+        } 
         if (guest.invited === false) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleInvite}>Invite</button><p>
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleInvite}>Invite</button><p>
         </p></li>)
         }
       })
@@ -208,6 +234,24 @@ const Attendance = () => {
     })
   }
 
+  const renderCouple = () => {
+    const lis = []
+    if (guestList) {
+      let tag = null
+      guestList.guests.forEach((guest) => {
+        if (guest.bride === true) {
+          tag = "(Bride)"
+        } else if (guest.groom === true) {
+          tag = '(Groom)'
+        }
+        if (guest.groom || guest.bride === true) {
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button></li>)
+        }
+      })
+    }
+    return(lis)
+  }
+
   if (listStatus === false) {
     return (
       <div>
@@ -223,8 +267,8 @@ const Attendance = () => {
           <label>Partner: </label>
           <input id={'P'} value={guestName} onChange={handleChange}></input>
           <select onChange={handleChange}>
-            <option id={'G'}>Groom</option>
-            <option id={'B'}>Bride</option>
+            <option value={"Groom"} >Groom</option>
+            <option value={"Bride"}>Bride</option>
           </select>
           <br/>
           <button>Add Partner</button>
@@ -234,6 +278,8 @@ const Attendance = () => {
   } else {
     return(
       <div>
+        <p>The lucky couple</p>
+        {renderCouple()}
         <p>Your list of guests</p>
         <ul>
           <p>Invited</p>

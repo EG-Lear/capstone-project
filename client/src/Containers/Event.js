@@ -127,7 +127,7 @@ const Event = ({user}) => {
         rCost = '(reception has not been given any budget)'
       }
     } else {
-      rCost = null
+      rCost = '(reception has not been given any budget)'
     }
     return (
       <p>Your reception costs {rCost} and you have (TBI) other expenses costing (TBI).</p>
@@ -156,9 +156,14 @@ const Event = ({user}) => {
   }
 
   const renderPeople = () => {
-    let xCount = event.head_count
+    let xCount 
     let xCapacity = event.venue_capacity
-    if (xCount === null) {
+    if (event.attendance) {
+      xCount = event.attendance.invited
+      if (xCount === null) {
+        xCount = "(people have not yet been invited)"
+      }
+    } else {
       xCount = "(people have not yet been invited)"
     }
     if (xCapacity === null) {
@@ -174,8 +179,8 @@ const Event = ({user}) => {
       <div>
         <h4>{event.name}</h4>
         {renderDate()}
-        <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget}$ left to spend.</p>
         {renderPeople()}
+        <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget}$ left to spend.</p>
         {renderAllCost()}
         {renderReceptionDate()}
       </div>

@@ -3,10 +3,13 @@ class CreateGuests < ActiveRecord::Migration[6.1]
     create_table :guests do |t|
       t.string :name
       t.integer :attendance_id
+      t.boolean :plus_one
       t.boolean :invited
+      t.boolean :bridesmaid
+      t.boolean :groomsmen
       t.boolean :bride
       t.boolean :groom
- 
+      t.boolean :family
 
       t.timestamps
     end
