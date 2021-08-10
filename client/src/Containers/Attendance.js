@@ -11,6 +11,7 @@ const Attendance = () => {
   const [isGroomsmen, setIsGroomsmen] = useState(false)
   const [isFamily, setIsFamily] = useState(false)
   const [plusOne, setPlusOne] = useState(false)
+  const [updating, setUpdating] = useState(false)
 
   useEffect(() => {//loads data when page loads or refreshes
     fetch('/attendances')
@@ -47,25 +48,25 @@ const Attendance = () => {
       setIsBride(true)
     } else if (event.target.id === 'L') {
       setGuestName(event.target.value)
-    } else if (event.target.id === 'O') {
+    } else if (event.target.value === 'O') {
       setIsGroomsmen(false)
       setIsBridesmaid(false)
       setIsFamily(false)
-    } else if (event.target.id === 'BM') {
+    } else if (event.target.value === 'BM') {
       setIsGroomsmen(false)
       setIsBridesmaid(true)
       setIsFamily(false)
-    } else if (event.target.id === 'GM') {
+    } else if (event.target.value === 'GM') {
       setIsGroomsmen(true)
       setIsBridesmaid(false)
       setIsFamily(false)
-    } else if (event.target.id === 'F') {
+    } else if (event.target.value === 'F') {
       setIsGroomsmen(false)
       setIsBridesmaid(false)
       setIsFamily(true)
-    } else if (event.target.id === 'PT') {
+    } else if (event.target.value === 'PT') {
       setPlusOne(true)
-    } else if (event.target.id === 'PF') {
+    } else if (event.target.value === 'PF') {
       setPlusOne(false)
     } 
   }
@@ -202,7 +203,8 @@ const Attendance = () => {
       },
       body: JSON.stringify({
         name: x,
-        invited: false
+        invited: false,
+        plus_one: false
       })
     })
     .then(res => res.json())
@@ -280,13 +282,15 @@ const Attendance = () => {
     return(lis)
   }
 
-  const renderUpdateForm = () => {
-    return(
-      <form>
-        <p>Updating {guestName}</p>
-        <label></label>
-      </form>
-    )
+  const renderUpdateForm = () => { // renders update form
+    if (updating === true) {
+      return(
+        <form>
+          <p>Updating {guestName}</p>
+          <label></label>
+        </form>
+      )
+    }
   }
 
   const handleUpdate = (event) => {//updates guest info
@@ -307,6 +311,7 @@ const Attendance = () => {
       <div>
         <p>For now we recommend you begin by entering the lucky couple</p>
         {renderCouple()}
+        {renderUpdateForm()}
         <form onSubmit={handleCouple}>
           <label>Partner: </label>
           <input id={'P'} value={guestName} onChange={handleChange}></input>
@@ -325,6 +330,7 @@ const Attendance = () => {
         <p>The lucky couple</p>
         {renderCouple()}
         <p>Your list of guests</p>
+        {renderUpdateForm()}
         <ul>
           <p>Invited</p>
           {renderInvitedGuests()}
@@ -338,16 +344,16 @@ const Attendance = () => {
           <label>Name: </label>
           <input id={'L'} value={guestName} onChange={handleChange}></input>
           <select onChange={handleChange}>
-            <option id={'O'}>Other</option>
-            <option id={'BM'}>Bridesmaid</option>
-            <option id={'GM'}>Groomsmen</option>
-            <option id={'F'}>Family</option>
+            <option value={'O'}>Other</option>
+            <option value={'BM'}>Bridesmaid</option>
+            <option value={'GM'}>Groomsmen</option>
+            <option value={'F'}>Family</option>
           </select>  
           <br/>
           <label>Give them a plus one? </label>
           <select onChange={handleChange}>
-            <option id={'PF'}>no</option>
-            <option id={'PT'}>yes</option>
+            <option value={'PF'}>no</option>
+            <option value={'PT'}>yes</option>
           </select>
           <br/>
           <button>Add</button>

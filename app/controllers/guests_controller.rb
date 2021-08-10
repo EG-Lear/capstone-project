@@ -40,7 +40,10 @@ class GuestsController < ApplicationController
   def calculate_invited
     attendance = find_attendance
     invited_count = attendance.guests.group(:invited).count.sort_by{|invited, count|}.last[1]
-    attendance.update(invited: invited_count)
+    plus_one_count = attendance.guests.group(:plus_one).count.sort_by{|plus_one, count|}.last[1]
+    total_count = invited_count + plus_one_count
+    puts total_count
+    attendance.update(invited: total_count)
   end
 
   def guests_params
