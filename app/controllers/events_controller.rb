@@ -13,10 +13,11 @@ class EventsController < ApplicationController
   
   def create
     event = Event.create(event_params)
+    # byebug
     if event.valid?
       render json: event, status: :created
     else
-      render json: { errrors: event.errors.full_messages }
+      render json: { errors: event.errors.full_messages }
     end
   end
 

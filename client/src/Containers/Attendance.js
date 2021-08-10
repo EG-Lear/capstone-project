@@ -12,7 +12,7 @@ const Attendance = () => {
   const [isFamily, setIsFamily] = useState(false)
   const [counter, setCounter] = useState(false)
 
-  useEffect(() => {
+  useEffect(() => {//loads data when page loads or refreshes
     fetch('/attendances')
     .then(res => {
       if (res.ok) {
@@ -35,7 +35,7 @@ const Attendance = () => {
     .then(data => setGuestList(data))
   }, [])
 
-  const handleChange = (event) => {
+  const handleChange = (event) => {//changes state when user interacts with webpage
     // console.log(event.target.value)
     if (event.target.id === 'P') {
       setGuestName(event.target.value)
@@ -50,7 +50,7 @@ const Attendance = () => {
     }
   }
 
-  const handleStartUp = () => {
+  const handleStartUp = () => {//handles creation of attendance model
     fetch('/attendances', {
       method: 'POST',
       headers: {
@@ -71,7 +71,7 @@ const Attendance = () => {
     })
   }
 
-  const handleCouple = (event) => {
+  const handleCouple = (event) => {//hangles creation of couple on initial set up
     event.preventDefault()
     fetch(`/attendances/${guestList.id}/guests`, {
       method: 'POST',
@@ -100,7 +100,7 @@ const Attendance = () => {
     })
   }
 
-  const renderInvitedGuests = () => {
+  const renderInvitedGuests = () => {//renders invited guests
     const lis = []
     if (guestList) {
       guestList.guests.forEach((guest) => {
@@ -122,7 +122,7 @@ const Attendance = () => {
     return(lis)
   }
 
-  const renderNotInvitedGuests = () => {
+  const renderNotInvitedGuests = () => {// renders guest not currently invited
     const lis = []
     if (guestList) {
       guestList.guests.forEach((guest) => {
@@ -147,7 +147,7 @@ const Attendance = () => {
     return(lis)
   }
 
-  const handleInvite = (event) => {
+  const handleInvite = (event) => { //invites guest
     event.preventDefault()
     const i = event.target.id
     const x = event.target.value
@@ -171,7 +171,7 @@ const Attendance = () => {
     })
   }
 
-  const handleUnInvite = (event) => {
+  const handleUnInvite = (event) => { //uninvites a guest
     event.preventDefault()
     const i = event.target.id
     const x = event.target.value
@@ -195,7 +195,7 @@ const Attendance = () => {
     })
   }
 
-  const handleDelete = (event) => {
+  const handleDelete = (event) => { //deletes a guest from list
     const i = event.target.id
     console.log(i)
     fetch(`/guests/${i}`, {
@@ -211,7 +211,7 @@ const Attendance = () => {
     })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { //creates new guest
     event.preventDefault()
     fetch(`/attendances/${guestList.id}/guests`, {
       method: 'POST',
@@ -234,7 +234,7 @@ const Attendance = () => {
     })
   }
 
-  const renderCouple = () => {
+  const renderCouple = () => { //renders the couple
     const lis = []
     if (guestList) {
       let tag = null
@@ -245,21 +245,26 @@ const Attendance = () => {
           tag = '(Groom)'
         }
         if (guest.groom || guest.bride === true) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button></li>)
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleUpdate}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> </li>)
         }
       })
     }
     return(lis)
   }
 
-  if (listStatus === false) {
+  const handleUpdate = (event) => {
+    event.preventDefault()
+    fetch()
+  }
+
+  if (listStatus === false) {//renders greeting on first load
     return (
       <div>
         <h4>Lets get started planning your guest list!</h4>
       <button onClick={handleStartUp}>Start!</button>
     </div>
     )
-  } else if (pOneEntered === false) {
+  } else if (pOneEntered === false) {//renders form to create the couple
     return (
       <div>
         <p>For now we recommend you begin by entering the lucky couple</p>
@@ -275,7 +280,7 @@ const Attendance = () => {
         </form>
       </div>
     ) 
-  } else {
+  } else { //renders the main feature of page
     return(
       <div>
         <p>The lucky couple</p>

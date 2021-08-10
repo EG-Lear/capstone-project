@@ -20,6 +20,7 @@ function App() {
   }
 
   const logoutUser = () => {
+    console.log("in logout")
     fetch('/logout', {
       method: 'DELETE'
     })
@@ -33,6 +34,10 @@ function App() {
   useEffect(() => {
     fetch('/me')
     .then(res => {
+      if (res.status === 401) {
+        history.push('/')
+        alert("please log in")
+      }
       if (res.ok) {
         res.json()
         .then(u => {
