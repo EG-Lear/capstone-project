@@ -10,7 +10,7 @@ const Attendance = () => {
   const [isBridesmaid, setIsBridesmaid] = useState(false)
   const [isGroomsmen, setIsGroomsmen] = useState(false)
   const [isFamily, setIsFamily] = useState(false)
-  const [counter, setCounter] = useState(false)
+  const [plusOne, setPlusOne] = useState(false)
 
   useEffect(() => {//loads data when page loads or refreshes
     fetch('/attendances')
@@ -36,7 +36,7 @@ const Attendance = () => {
   }, [])
 
   const handleChange = (event) => {//changes state when user interacts with webpage
-    // console.log(event.target.value)
+    // console.log(event.target.value) O BM GM F PF PT
     if (event.target.id === 'P') {
       setGuestName(event.target.value)
     } else if (event.target.value === 'Groom') {
@@ -47,7 +47,27 @@ const Attendance = () => {
       setIsBride(true)
     } else if (event.target.id === 'L') {
       setGuestName(event.target.value)
-    }
+    } else if (event.target.id === 'O') {
+      setIsGroomsmen(false)
+      setIsBridesmaid(false)
+      setIsFamily(false)
+    } else if (event.target.id === 'BM') {
+      setIsGroomsmen(false)
+      setIsBridesmaid(true)
+      setIsFamily(false)
+    } else if (event.target.id === 'GM') {
+      setIsGroomsmen(true)
+      setIsBridesmaid(false)
+      setIsFamily(false)
+    } else if (event.target.id === 'F') {
+      setIsGroomsmen(false)
+      setIsBridesmaid(false)
+      setIsFamily(true)
+    } else if (event.target.id === 'PT') {
+      setPlusOne(true)
+    } else if (event.target.id === 'PF') {
+      setPlusOne(false)
+    } 
   }
 
   const handleStartUp = () => {//handles creation of attendance model
@@ -220,7 +240,11 @@ const Attendance = () => {
       },
       body: JSON.stringify({
         name: guestName,
-        invited: true
+        invited: true,
+        groomsmen: isGroomsmen,
+        bridesmaid: isBridesmaid,
+        family: isFamily,
+        plus_one: plusOne
       })
     })
     .then(res => res.json())
@@ -230,6 +254,10 @@ const Attendance = () => {
       } else {
         setGuestList(data)
         setGuestName('')
+        setIsGroomsmen(false)
+        setIsBridesmaid(false)
+        setIsFamily(false)
+        setPlusOne(false)
       }
     })
   }
@@ -252,9 +280,19 @@ const Attendance = () => {
     return(lis)
   }
 
-  const handleUpdate = (event) => {
+  const renderUpdateForm = () => {
+    return(
+      <form>
+        <p>Updating {guestName}</p>
+        <label></label>
+      </form>
+    )
+  }
+
+  const handleUpdate = (event) => {//updates guest info
     event.preventDefault()
-    fetch()
+    console.log(event)
+    // fetch()
   }
 
   if (listStatus === false) {//renders greeting on first load
@@ -268,6 +306,7 @@ const Attendance = () => {
     return (
       <div>
         <p>For now we recommend you begin by entering the lucky couple</p>
+        {renderCouple()}
         <form onSubmit={handleCouple}>
           <label>Partner: </label>
           <input id={'P'} value={guestName} onChange={handleChange}></input>
@@ -298,6 +337,18 @@ const Attendance = () => {
           <p>add new guests</p>
           <label>Name: </label>
           <input id={'L'} value={guestName} onChange={handleChange}></input>
+          <select onChange={handleChange}>
+            <option id={'O'}>Other</option>
+            <option id={'BM'}>Bridesmaid</option>
+            <option id={'GM'}>Groomsmen</option>
+            <option id={'F'}>Family</option>
+          </select>  
+          <br/>
+          <label>Give them a plus one? </label>
+          <select onChange={handleChange}>
+            <option id={'PF'}>no</option>
+            <option id={'PT'}>yes</option>
+          </select>
           <br/>
           <button>Add</button>
         </form>

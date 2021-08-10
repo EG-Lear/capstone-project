@@ -44,8 +44,8 @@ class GuestsController < ApplicationController
   end
 
   def guests_params
-    defaults = { attendance_id: User.find(session[:user_id]).attendance.id, plus_one: false}
-    params.permit(:name, :bride, :groom, :invited, :bridesmaid, :groomsmen, :family).reverse_merge(defaults)
+    defaults = { attendance_id: User.find(session[:user_id]).attendance.id}
+    params.permit(:name, :bride, :groom, :invited, :bridesmaid, :groomsmen, :family, :plus_one).reverse_merge(defaults)
   end
   
   def find_attendance
