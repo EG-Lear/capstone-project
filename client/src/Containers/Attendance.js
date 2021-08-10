@@ -12,6 +12,15 @@ const Attendance = () => {
   const [isFamily, setIsFamily] = useState(false)
   const [plusOne, setPlusOne] = useState(false)
   const [updating, setUpdating] = useState(false)
+  const [upName, setUpName] = useState('')
+  const [guestId, setGuestId] = useState(0)
+  const [toUpName, setToUpName] = useState('')
+  const [uBridesmaid, setUBridesmaid] = useState(false)
+  const [uGroomsmen, setUGroomsmen] = useState(false)
+  const [uFamily, setUFamily] = useState(false)
+  const [uPlusOne, setUPlusOne] = useState(false)
+  const [uBride, setUBride] = useState(false)
+  const [uGroom, setUGroom] = useState(false)
 
   useEffect(() => {//loads data when page loads or refreshes
     fetch('/attendances')
@@ -68,7 +77,9 @@ const Attendance = () => {
       setPlusOne(true)
     } else if (event.target.value === 'PF') {
       setPlusOne(false)
-    } 
+    } else if (event.target.id === 'UN') {
+      setToUpName(event.target.value)
+    }
   }
 
   const handleStartUp = () => {//handles creation of attendance model
@@ -135,7 +146,7 @@ const Attendance = () => {
         } 
         if (guest.groom || guest.bride === true) {
         } else if (guest.invited === true) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} value={guest.name} onClick={updateActive}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
         </p></li>)
         }
       })
@@ -160,7 +171,7 @@ const Attendance = () => {
           tag = '(Family)'
         } 
         if (guest.invited === false) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleInvite}>Invite</button><p>
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} value={guest.name} onClick={updateActive}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleInvite}>Invite</button><p>
         </p></li>)
         }
       })
@@ -275,7 +286,7 @@ const Attendance = () => {
           tag = '(Groom)'
         }
         if (guest.groom || guest.bride === true) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} onClick={handleUpdate}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> </li>)
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} value={guest.name} onClick={updateActive}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> </li>)
         }
       })
     }
@@ -285,18 +296,84 @@ const Attendance = () => {
   const renderUpdateForm = () => { // renders update form
     if (updating === true) {
       return(
-        <form>
-          <p>Updating {guestName}</p>
-          <label></label>
-        </form>
+        <div>
+          <form onSubmit={handleUpdate}>
+            <p>Updating {upName}</p>
+            <label>Name: </label>
+            <input id={'UN'} value={toUpName} onChange={handleChange}></input>
+            <select onChange={handleChange}>
+              <option value={'UO'}>Other</option>
+              <option value={'UBM'}>Bridesmaid</option>
+              <option value={'UGM'}>Groomsmen</option>
+              <option value={'UF'}>Family</option>
+              <option value={"UGroom"} >Groom</option>
+              <option value={"UBride"}>Bride</option>
+            </select>
+            <br/> 
+            <label>Give them a plus one? </label>
+            <select onChange={handleChange}>
+              <option value={'UPF'}>no</option>
+              <option value={'UPT'}>yes</option>
+            </select>
+            <button>Make Change</button>
+          </form>
+          <button onClick={cancelUpdate}>Cancel</button>
+        </div>
       )
     }
   }
 
-  const handleUpdate = (event) => {//updates guest info
+  const handleUpdate = (event) => { //updates guest information
     event.preventDefault()
-    console.log(event)
-    // fetch()
+    const i = parseInt(guestId)
+    fetch(`/guests/${i}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: toUpName,
+        groomsmen: uGroomsmen,
+        bridesmaid: uBridesmaid,
+        family: uFamily,
+        plus_one: uPlusOne,
+        groom: uGroom,
+        bride: uBride
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setGuestList(data)
+        setToUpName('')
+        setUGroomsmen(false)
+        setUBridesmaid(false)
+        setUFamily(false)
+        setUPlusOne(false)
+        setUGroom(false)
+        setUBride(false)
+      }
+    })
+  }
+
+  const cancelUpdate = () => { // prompts unrender of update form
+    setUpdating(false)
+    setUpName('')
+    setIsGroomsmen(false)
+    setIsBridesmaid(false)
+    setIsFamily(false)
+    setPlusOne(false)
+  }
+
+  const updateActive = (event) => {// prompts update render
+    setUpName(event.target.value)
+    setToUpName(event.target.value)
+    setGuestId(event.target.id)
+    if (updating === false) {
+      setUpdating(true)
+    } 
   }
 
   if (listStatus === false) {//renders greeting on first load
@@ -327,20 +404,20 @@ const Attendance = () => {
   } else { //renders the main feature of page
     return(
       <div>
-        <p>The lucky couple</p>
+        <h3>The lucky couple</h3>
         {renderCouple()}
-        <p>Your list of guests</p>
+        <h3>Your list of guests</h3>
         {renderUpdateForm()}
         <ul>
-          <p>Invited</p>
+          <h5>Invited</h5>
           {renderInvitedGuests()}
         </ul>
         <ul>
-          <p>Not Invited</p>
+          <h5>Not Invited</h5>
           {renderNotInvitedGuests()}
         </ul>
         <form onSubmit={handleSubmit}>
-          <p>add new guests</p>
+          <h5>add new guests</h5>
           <label>Name: </label>
           <input id={'L'} value={guestName} onChange={handleChange}></input>
           <select onChange={handleChange}>
