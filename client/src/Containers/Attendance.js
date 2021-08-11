@@ -79,6 +79,29 @@ const Attendance = () => {
       setPlusOne(false)
     } else if (event.target.id === 'UN') {
       setToUpName(event.target.value)
+    } else if (event.target.value === 'UPF') {
+      setUPlusOne(false)
+    } else if (event.target.value === 'UPT') {
+      setUPlusOne(true)
+    }
+  }
+
+  const handleUpdateChange = (event) => {
+    setUFamily(false)
+    setUGroom(false)
+    setUBride(false)
+    setUBridesmaid(false)
+    setUGroomsmen(false)
+    if (event.target.value === 'UF') {
+      setUFamily(true)
+    } else if (event.target.value === 'UBM') {
+      setUBridesmaid(true)
+    } else if (event.target.value === 'UGM') {
+      setUGroomsmen(true)
+    } else if (event.target.value === 'UGroom') {
+      setUGroom(true)
+    } else if (event.target.value === 'UBride') {
+      setUBride(true)
     }
   }
 
@@ -137,6 +160,7 @@ const Attendance = () => {
     if (guestList) {
       guestList.guests.forEach((guest) => {
         let tag = null
+        let extra = null
         if (guest.bridesmaid) {
           tag = '(Bridesmaid)'
         } else if (guest.groomsmen) {
@@ -144,9 +168,12 @@ const Attendance = () => {
         } else if (guest.family) {
           tag = '(Family)'
         } 
+        if (guest.plus_one === true) {
+          extra = '(+1)'
+        }
         if (guest.groom || guest.bride === true) {
         } else if (guest.invited === true) {
-          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} <button id={`${guest.id}`} value={guest.name} onClick={updateActive}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
+          lis.push(<li key={`${guest.id}`}>{guest.name} {tag} {extra} <button id={`${guest.id}`} value={guest.name} onClick={updateActive}>Edit</button> <button id={`${guest.id}`} onClick={handleDelete}>Delete</button> <button id={`${guest.id}`} value={guest.name} onClick={handleUnInvite}>Uninvite</button><p>
         </p></li>)
         }
       })
@@ -301,7 +328,9 @@ const Attendance = () => {
             <p>Updating {upName}</p>
             <label>Name: </label>
             <input id={'UN'} value={toUpName} onChange={handleChange}></input>
-            <select onChange={handleChange}>
+            <br/>
+            <label>Affiliation/Wedding Party </label>
+            <select onChange={handleUpdateChange}>
               <option value={'UO'}>Other</option>
               <option value={'UBM'}>Bridesmaid</option>
               <option value={'UGM'}>Groomsmen</option>
@@ -315,6 +344,7 @@ const Attendance = () => {
               <option value={'UPF'}>no</option>
               <option value={'UPT'}>yes</option>
             </select>
+            <br/>
             <button>Make Change</button>
           </form>
           <button onClick={cancelUpdate}>Cancel</button>
@@ -327,7 +357,7 @@ const Attendance = () => {
     event.preventDefault()
     const i = parseInt(guestId)
     fetch(`/guests/${i}`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         "Content-Type": "application/json"
       },
@@ -347,13 +377,7 @@ const Attendance = () => {
         alert(data.errors)
       } else {
         setGuestList(data)
-        setToUpName('')
-        setUGroomsmen(false)
-        setUBridesmaid(false)
-        setUFamily(false)
-        setUPlusOne(false)
-        setUGroom(false)
-        setUBride(false)
+        cancelUpdate()
       }
     })
   }
@@ -365,6 +389,8 @@ const Attendance = () => {
     setIsBridesmaid(false)
     setIsFamily(false)
     setPlusOne(false)
+    setToUpName('')
+    setGuestId('')
   }
 
   const updateActive = (event) => {// prompts update render
@@ -420,6 +446,8 @@ const Attendance = () => {
           <h5>add new guests</h5>
           <label>Name: </label>
           <input id={'L'} value={guestName} onChange={handleChange}></input>
+          <br/>
+          <label>Affiliation/Wedding Party </label>
           <select onChange={handleChange}>
             <option value={'O'}>Other</option>
             <option value={'BM'}>Bridesmaid</option>
