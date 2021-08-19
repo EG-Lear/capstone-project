@@ -7,6 +7,7 @@ const Event = ({user}) => {
   const [budget, setBudget] = useState('')
   const [dateSelected, setDateSelected] = useState(false)
   const [date, setDate] = useState('')
+  const [updateStatus, setUpdateStatus] = useState(false)
 
   useEffect(() => {
     fetch('/events')
@@ -173,6 +174,32 @@ const Event = ({user}) => {
       <p>The total number of people you have invited to the wedding is {xCount} and you have a max capacity of {xCapacity}.</p>
     )
   }
+  
+  const handleClick = () => {
+    if (updateStatus === false) {
+      setUpdateStatus(true)
+    } else {
+      setUpdateStatus(false)
+    }
+  }
+
+  const renderUpdate = () => {
+    if (updateStatus === false) {
+
+      return (
+        <button onClick={handleClick}>Edit Event</button>
+      )
+    } else {
+      return (
+        <div>
+          <form>
+
+          </form>
+          <button onClick={handleClick}>Cancel</button>
+        </div>
+      )
+    }
+  }
 
   if (eventStatus === true) {
     return (
@@ -183,6 +210,7 @@ const Event = ({user}) => {
         <p>You have alloted a total budget of {event.total_budget}$ and have {event.available_budget}$ left to spend.</p>
         {renderAllCost()}
         {renderReceptionDate()}
+        {renderUpdate()}
       </div>
     )
   } else {

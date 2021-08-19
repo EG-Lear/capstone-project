@@ -402,6 +402,14 @@ const Attendance = () => {
     } 
   }
 
+  const renderCount = () => {
+    if (guestList.invited !== undefined) {
+      return (
+        <p>You have invited {guestList.invited - 2} people.</p> 
+      )
+    }
+  }
+
   if (listStatus === false) {//renders greeting on first load
     return (
       <div>
@@ -433,6 +441,7 @@ const Attendance = () => {
         <h3>The lucky couple</h3>
         {renderCouple()}
         <h3>Your list of guests</h3>
+        {renderCount()}
         {renderUpdateForm()}
         <ul>
           <h5>Invited</h5>
