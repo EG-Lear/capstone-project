@@ -7,9 +7,8 @@ const Expenses = () => {
   const [name, setName] = useState('')
   const [cost, setCost] = useState('')
   const [description, setDescription] = useState('')
-  const [updateName, setUpdateName] = useState('')
-  const [updateCost, setUpdateCost] = useState('')
-  const [updateDescription, setUpdateDescription] = useState('')
+  const [updateExpense, setUpdateExpense] = useState({})
+
 
   useEffect(() => {
     fetch('/expenses')
@@ -33,7 +32,7 @@ const Expenses = () => {
     if (expenses) {
       let counter = 0
       expenses.forEach((expense) => {lis.push(
-        <li key={counter}>{expense.name} <button id={counter} onClick={handleDelete}>Delete</button> <button id={counter} value={expense.name} onClick={handleEdit}>Edit</button> <br/> Cost: {expense.cost}$ <br/> {expense.description}</li>)
+        <li key={counter}>{expense.name} <button id={counter} onClick={handleDelete}>Delete</button> <button id={counter} onClick={handleEdit}>Edit</button> <br/> Cost: {expense.cost}$ <br/> {expense.description}</li>)
         counter++
       })
     }
@@ -56,7 +55,8 @@ const Expenses = () => {
   }
 
   const handleEdit = (event) => {
-
+    setUpdateExpense(expenses[event.target.id])
+    setUpdateStatus(true)
   }
 
   const renderUpdate = () => {
@@ -65,11 +65,22 @@ const Expenses = () => {
     } else {
       return(
         <div>
-          <ExpensesUpdateForm />
-          <button>Cancel</button>
+          <ExpensesUpdateForm expense={updateExpense} update={handleUpdate}/>
+          <button onClick={handleClick}>Cancel</button>
         </div>
       )
     }
+  }
+
+  const handleUpdate = (data) => {
+    setUpdateStatus(false)
+    setUpdateExpense({})
+    setExpenses(data)
+  }
+
+  const handleClick = () => {
+    setUpdateStatus(false)
+    setUpdateExpense({})
   }
 
   const handleChange = (event) => {
