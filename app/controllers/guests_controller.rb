@@ -7,7 +7,7 @@ class GuestsController < ApplicationController
   def create
     guest = Guest.create(guests_params)
     if guest.valid?
-      calculate_invited
+      calculate_invited     
       attendance = find_attendance
       render json: attendance, status: :created
     else
@@ -41,13 +41,16 @@ class GuestsController < ApplicationController
     attendance = find_attendance
     invited_count = attendance.guests.group(:invited).count.sort_by{|invited, count|}.last[1]
     plus_one_count = attendance.guests.group(:plus_one).count.sort_by{|plus_one, count|}.last[1]
+    if attendance.guests.group(:plus_one).count.sort_by{|plus_one, count|}.length == 1
+      plus_one_count = 0
+    end
     total_count = invited_count + plus_one_count
     puts total_count
     attendance.update(invited: total_count)
   end
 
   def guests_params
-    defaults = { attendance_id: User.find(session[:user_id]).attendance.id}
+    defaults = { attendance_id: User.find(session[:user_id]).attendance.id, plus_one: false}
     params.permit(:name, :bride, :groom, :invited, :bridesmaid, :groomsmen, :family, :plus_one).reverse_merge(defaults)
   end
   

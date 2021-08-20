@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background-color: #FFCBA4;
+  height: 100vh
 }
 
 .App-logo {
@@ -25,7 +27,7 @@
 }
 
 .App-link {
-  color: #dfca12;
+  color: royalblue;
   margin-right: 10px;
 }
 
@@ -57,4 +59,25 @@
 
 .RecoList{
   list-style: none;
+}
+
+.ListElement{
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+.ListBox{
+  display: flex;
+  align-items: stretch;
+  *align-items: center;
+  justify-content: center;
+}
+
+.UList{
+  list-style-type: none;
+}
+
+
+.RList{
+  list-style-type: none;
 }

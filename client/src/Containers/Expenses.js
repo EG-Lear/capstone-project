@@ -32,7 +32,7 @@ const Expenses = () => {
     if (expenses) {
       let counter = 0
       expenses.forEach((expense) => {lis.push(
-        <li key={counter}>{expense.name} <button id={counter} onClick={handleDelete}>Delete</button> <button id={counter} onClick={handleEdit}>Edit</button> <br/> Cost: {expense.cost}$ <br/> {expense.description}</li>)
+        <li key={counter} className={'ListElement'}><b>{expense.name}</b> <button id={counter} onClick={handleDelete}>Delete</button> <button id={counter} onClick={handleEdit}>Edit</button> <br/> Cost: {expense.cost}$ <br/> {expense.description}</li>)
         counter++
       })
     }

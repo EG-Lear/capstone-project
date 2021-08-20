@@ -385,14 +385,16 @@ const Reception = () => {
         {renderInfo()}
         {renderUpdateForm()}
         {renderRUpdate()}
-        <ul>
-          <p>Concessions</p>
-          {renderFood()}
-        </ul>
-        <ul>
-          <p>Decorations</p>
-          {renderDecorations()}
-        </ul>
+        <div className={'ListBox'}>
+          <ul className={'UList'}>
+            <h4>Concessions</h4>
+            {renderFood()}
+          </ul>
+          <ul className={'RList'}>
+            <h4>Decorations</h4>
+            {renderDecorations()}
+          </ul>
+        </div>
         <form onSubmit={handleFood}>
           <p>You can add items to your menu here.</p>
           <label>Name: </label>

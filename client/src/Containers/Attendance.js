@@ -257,7 +257,6 @@ const Attendance = () => {
 
   const handleDelete = (event) => { //deletes a guest from list
     const i = event.target.id
-    console.log(i)
     fetch(`/guests/${i}`, {
       method: "DELETE"
     })
@@ -267,6 +266,9 @@ const Attendance = () => {
         alert(data.errors)
       } else {
         setGuestList(data)
+        if (data.invited < 2) {
+          setPOneEntered(false)
+        }
       }
     })
   }
@@ -304,7 +306,7 @@ const Attendance = () => {
 
   const renderCouple = () => { //renders the couple
     const lis = []
-    if (guestList) {
+    if (guestList.guests !== undefined) {
       let tag = null
       guestList.guests.forEach((guest) => {
         if (guest.bride === true) {
@@ -443,14 +445,16 @@ const Attendance = () => {
         <h3>Your list of guests</h3>
         {renderCount()}
         {renderUpdateForm()}
-        <ul>
-          <h5>Invited</h5>
-          {renderInvitedGuests()}
-        </ul>
-        <ul>
-          <h5>Not Invited</h5>
-          {renderNotInvitedGuests()}
-        </ul>
+        <div className={'ListBox'}>
+          <ul className={'UList'}>
+            <h5>Invited</h5>
+            {renderInvitedGuests()}
+          </ul>
+          <ul className={'RList'}>
+            <h5>Not Invited</h5>
+            {renderNotInvitedGuests()}
+          </ul>
+        </div>
         <form onSubmit={handleSubmit}>
           <h5>add new guests</h5>
           <label>Name: </label>
