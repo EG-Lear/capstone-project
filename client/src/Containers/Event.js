@@ -110,14 +110,18 @@ const Event = ({user}) => {
   const renderDate = () => { //renders date/location
     let xDate = event.date
     let xLocation = event.location
+    let xTime = event.time
     if (xDate === null) {
       xDate = "(the date has not been set)"
     }
     if (xLocation === null) {
       xLocation = "(location to be determined)"
     }
+    if (xTime === null) {
+      xTime = "(Time has not been set)"
+    }
     return (
-      <p>The big day is planned for {xDate} and will be located at {xLocation}.</p>
+      <p>The big day is planned for {xDate} at {xTime} and will be located at {xLocation}.</p>
     )
   }
 
@@ -132,7 +136,7 @@ const Event = ({user}) => {
       rCost = '(reception has not been given any budget)'
     }
     return (
-      <p>Your reception costs {rCost} and you have (TBI) other expenses costing (TBI).</p>
+      <p>Your reception costs {rCost}$ and you have (TBI) other expenses costing (TBI).</p>
     )
   }
 
@@ -172,7 +176,7 @@ const Event = ({user}) => {
       xCapacity = "(a maximum capacity has not been set)"
     }
     return (
-      <p>The total number of people you have invited to the wedding is {xCount} and you have a max capacity of {xCapacity}.</p>
+      <p>The total number of people you are expecting at the event is {xCount} and you have a max capacity of {xCapacity}.</p>
     )
   }
   

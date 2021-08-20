@@ -43,9 +43,16 @@ class EventsController < ApplicationController
     if params[:total_budget].nil?
       # do nothing
     elsif params[:total_budget] > Event.find(params[:id]).total_budget
-      
+      increase = params[:total_budget] - Event.find(params[:id]).total_budget
+      budget = available + increase
+    elsif params[:total_budget] < Event.find(params[:id]).total_budget
+      decrease = Event.find(params[:id]).total_budget - params[:total_budget]
+      budget = available - decrease
+    else
+      budget = available
     end
-    params.permit(:name, :total_budget, :date, :venue_capacity, :time, :location)
+    defaults = { available_budget: budget}
+    params.permit(:name, :total_budget, :date, :venue_capacity, :time, :location).reverse_merge(defaults)
   end
 
   def find_user

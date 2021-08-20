@@ -45,7 +45,7 @@ const EventUpdateForm = ({ourEvent, update}) => {
       uCapacity = capacity
     }
     if (budget.length > 0) {
-      uBudget = budget
+      uBudget = parseInt(budget)
     }
     if (name.length > 0) {
       uName = name

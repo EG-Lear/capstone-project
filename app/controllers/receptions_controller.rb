@@ -37,8 +37,10 @@ class ReceptionsController < ApplicationController
 
   def calculate_reception_cost
     reception = find_user.reception
+    event = find_user.event
     cost_value = reception.decorations.sum(:total_cost) + reception.concessions.sum(:total_cost)
     reception.update(total_cost: cost_value)
+    event.update(available_budget: event.total_budget - reception.total_cost)
   end
 
   def find_user

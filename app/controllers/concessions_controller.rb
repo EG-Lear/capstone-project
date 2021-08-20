@@ -42,9 +42,11 @@ class ConcessionsController < ApplicationController
   end
 
   def calculate_reception_cost
-    reception = find_reception
+    reception = find_user.reception
+    event = User.find(session[:user_id]).event
     cost_value = reception.decorations.sum(:total_cost) + reception.concessions.sum(:total_cost)
     reception.update(total_cost: cost_value)
+    event.update(available_budget: event.total_budget - reception.total_cost)
   end
 
   def find_reception

@@ -325,6 +325,16 @@ const Reception = () => {
     setRLocation('')
   }
 
+  const renderInfo = () => {
+    let xCost = reception.total_cost
+    if (xCost === null) {
+      xCost = 0
+    }
+    return (
+      <p>Your Reception is currently planned for {reception.time} at {reception.location} and its total cost is {xCost}$. <button onClick={handleRecepUpdate}>Change time/location</button></p>
+    )
+  }
+
   if (recepStatus === false) {
     return (
       <div>
@@ -343,7 +353,7 @@ const Reception = () => {
   } else {
     return (
       <div>
-        <p>Your Reception is currently planned for {reception.time} at {reception.location} and its total cost is {reception.total_cost}. <button onClick={handleRecepUpdate}>Change time/location</button></p>
+        {renderInfo()}
         {renderUpdateForm()}
         {renderRUpdate()}
         <ul>
