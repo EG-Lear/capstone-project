@@ -127,6 +127,8 @@ const Event = ({user}) => {
 
   const renderAllCost = () => { //renders budget information
     let rCost
+    let rExpenses
+    let rTotal
     if (event.reception) {
       rCost = event.reception.total_cost
       if (rCost === null) {
@@ -135,8 +137,20 @@ const Event = ({user}) => {
     } else {
       rCost = '(reception has not been given any budget)'
     }
+    if (event.expenses) {
+      rExpenses = event.expenses.length
+      if (rExpenses === null) {
+        rExpenses = 0
+        rTotal = 0
+      } else {
+        rTotal = event.expenses.reduce((total, expense) => total + expense.cost, 0)
+      }
+    } else {
+      rExpenses = 0
+      rTotal = 0
+    }
     return (
-      <p>Your reception costs {rCost}$ and you have (TBI) other expenses costing (TBI).</p>
+      <p>Your reception costs {rCost}$ and you have {rExpenses} other expenses costing {rTotal}$.</p>
     )
   }
 

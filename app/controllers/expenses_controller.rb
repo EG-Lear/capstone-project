@@ -12,7 +12,7 @@ class ExpensesController < ApplicationController
     expense = Expense.create(expenses_params)
     expenses = find_expenses
     if expense.valid?
-      # calculate_expenses_cost
+      calculate_expenses_cost
       render json: expenses, status: :created
     else
       render json: { errors: expense.errors.full_messages }
@@ -25,6 +25,7 @@ class ExpensesController < ApplicationController
       render json: { errors: "Expense not found" }
     else
       expense.update(update_params)
+      calculate_expenses_cost
       expenses = find_expenses
       render json: expenses
     end
@@ -33,7 +34,7 @@ class ExpensesController < ApplicationController
   def destroy
     expense = Expense.find(params[:id])
     expense.destroy
-    # calculate_expenses_cost
+    calculate_expenses_cost
     expenses = find_expenses
     render json: expenses
   end
@@ -56,7 +57,8 @@ class ExpensesController < ApplicationController
   def calculate_expenses_cost
     reception = find_user.reception
     event = find_user.event
-    event.update(available_budget: event.total_budget - reception.total_cost)
+    total = event.expenses.sum(:cost)
+    event.update(available_budget: event.total_budget - reception.total_cost - total)
   end
 
   def find_user

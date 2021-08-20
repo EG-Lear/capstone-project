@@ -154,7 +154,7 @@ const Reception = () => {
     const lis = []
     if (reception.concessions) {
       reception.concessions.forEach((item) => lis.push(<li key={`c${item.id}`}>{item.name} <button id={`c-${item.id}`} onClick={handleDelete}>Delete</button> <button id={`ce-${item.id}`} value={item.name} onClick={handleEdit}>Edit</button><p>
-        you are planning to order {item.amount} at a cost per unit of {item.cost} for a total cost of {item.total_cost}
+        you are planning to order {item.amount} at a cost per unit of {item.cost}$ for a total cost of {item.total_cost}$
       </p></li>))
     }
     return(lis)
@@ -164,7 +164,7 @@ const Reception = () => {
     const lis= []
     if (reception.decorations) {
       reception.decorations.forEach((deco) => lis.push(<li key={`d${deco.id}`}>{deco.name} <button id={`d-${deco.id}`} onClick={handleDelete}>Delete</button> <button id={`de-${deco.id}`} value={deco.name} onClick={handleEdit}>Edit</button><p>
-        you are planning to order {deco.amount} at a cost per unit of {deco.cost} for a total cost of {deco.total_cost}
+        you are planning to order {deco.amount} at a cost per unit of {deco.cost}$ for a total cost of {deco.total_cost}$
       </p></li>))
     }
     return(lis)

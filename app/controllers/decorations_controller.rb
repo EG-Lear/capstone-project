@@ -38,15 +38,20 @@ class DecorationsController < ApplicationController
 
   def calculate_reception_cost
     reception = find_reception
-    event = User.find(session[:user_id]).event
+    event = find_user.event
     cost_value = reception.decorations.sum(:total_cost) + reception.concessions.sum(:total_cost)
     reception.update(total_cost: cost_value)
-    event.update(available_budget: event.total_budget - reception.total_cost)
+    expenses_cost = event.expenses.sum(:cost)
+    event.update(available_budget: event.total_budget - reception.total_cost - expenses_cost)
   end
 
   def decorations_params
     defaults = { reception_id: User.find(session[:user_id]).reception.id, total_cost: params[:amount]*params[:cost] }
     params.permit(:name, :cost, :amount).reverse_merge(defaults)
+  end
+  
+  def find_user
+    User.find(session[:user_id])
   end
 
   def find_reception
