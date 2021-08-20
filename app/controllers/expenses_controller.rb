@@ -4,13 +4,13 @@ class ExpensesController < ApplicationController
   before_action :authorize
 
   def index
-    expenses = find_user.event.expenses
+    expenses = find_expenses
     render json: expenses
   end
 
   def create
     expense = Expense.create(expenses_params)
-    expenses = expenses = find_user.event.expenses
+    expenses = find_expenses
     if expense.valid?
       # calculate_expenses_cost
       render json: expenses, status: :created
@@ -21,7 +21,7 @@ class ExpensesController < ApplicationController
 
   def update
     expense = expense.find(params[:id])
-    expenses = expenses = find_user.event.expenses
+    expenses = find_expenses
     if expense.nil?
       render json: { errors: "Expense not found" }
     else
@@ -30,7 +30,19 @@ class ExpensesController < ApplicationController
     end
   end
 
+  def destroy
+    expense = Expense.find(params[:id])
+    expense.destroy
+    # calculate_expenses_cost
+    expenses = find_expenses
+    render json: expenses
+  end
+
   private
+
+  def find_expenses
+    find_user.event.expenses
+  end
 
   def expenses_params
     defaults = { event_id: User.find(session[:user_id]).event.id }

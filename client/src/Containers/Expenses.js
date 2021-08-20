@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react'
 import ExpensesUpdateForm from './ExpensesUpdateForm'
 
 const Expenses = () => {
-  const [expenses, setExpenses] = useState({})
+  const [expenses, setExpenses] = useState([])
   const [updateStatus, setUpdateStatus] = useState(false)
   const [name, setName] = useState('')
   const [cost, setCost] = useState('')
   const [description, setDescription] = useState('')
+  const [updateName, setUpdateName] = useState('')
+  const [updateCost, setUpdateCost] = useState('')
+  const [updateDescription, setUpdateDescription] = useState('')
 
   useEffect(() => {
     fetch('/expenses')
@@ -28,19 +31,32 @@ const Expenses = () => {
   const renderExpenses = () => {
     const lis = []
     if (expenses) {
-      expenses.forEach((expense) => lis.push(<li key={`c${expense.id}`}>{expense.name} <button id={`c-${expense.id}`} onClick={handleDelete}>Delete</button> <button id={`ce-${expense.id}`} value={expense.name} onClick={handleEdit}>Edit</button><p>
-      
-    </p></li>))
+      let counter = 0
+      expenses.forEach((expense) => {lis.push(
+        <li key={counter}>{expense.name} <button id={counter} onClick={handleDelete}>Delete</button> <button id={counter} value={expense.name} onClick={handleEdit}>Edit</button> <br/> Cost: {expense.cost}$ <br/> {expense.description}</li>)
+        counter++
+      })
     }
     return(lis)
   }
   
-  const handleDelete = () => {
-
+  const handleDelete = (event) => {
+    const i = expenses[event.target.id].id
+    fetch(`/expenses/${i}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setExpenses(data)
+      }
+    })
   }
 
-  const handleEdit = () => {
-    
+  const handleEdit = (event) => {
+
   }
 
   const renderUpdate = () => {
@@ -67,6 +83,30 @@ const Expenses = () => {
   }
   const handleSubmit = (event) => {
     event.preventDefault()
+    const xCost = parseInt(cost)
+    fetch('/expenses',{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name,
+        cost: xCost,
+        description: description
+      }) 
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      if (data.errors) {
+        alert(data.errors)
+      } else {
+        setExpenses(data)
+        setName('')
+        setCost('')
+        setDescription('')
+      }
+    })
   }
 
   return (
@@ -77,7 +117,7 @@ const Expenses = () => {
         {renderExpenses()}
       </ul>
       <form onSubmit={handleSubmit}>
-        <p>Add new expense</p>
+        <h4>Add new expense</h4>
         <label>Name: </label>
         <input id={'expenseName'} value={name} onChange={handleChange}></input>
         <br/>
