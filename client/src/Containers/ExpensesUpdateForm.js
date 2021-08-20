@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 const ExpensesUpdateForm = ({expense, update}) => {
   const [name, setName] = useState('')

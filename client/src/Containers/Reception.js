@@ -20,6 +20,7 @@ const Reception = () => {
   const [recepUpdate, setRecepUpdate] = useState(false)
   const [rTime, setRTime] = useState('')
   const [rLocation, setRLocation] = useState('')
+  const [arrayIndex, setArrayIndex] = useState('')
 
   useEffect(() => {
     fetch('/receptions')
@@ -153,9 +154,13 @@ const Reception = () => {
   const renderFood = () => {
     const lis = []
     if (reception.concessions) {
-      reception.concessions.forEach((item) => lis.push(<li key={`c${item.id}`}>{item.name} <button id={`c-${item.id}`} onClick={handleDelete}>Delete</button> <button id={`ce-${item.id}`} value={item.name} onClick={handleEdit}>Edit</button><p>
+      let counter = 0
+      reception.concessions.forEach((item) => {
+        lis.push(<li key={`c${counter}`}>{item.name} <button id={`c-${counter}`} onClick={handleDelete}>Delete</button> <button id={`ce-${counter}`} value={item.name} onClick={handleEdit}>Edit</button><p>
         you are planning to order {item.amount} at a cost per unit of {item.cost}$ for a total cost of {item.total_cost}$
-      </p></li>))
+        </p></li>)
+        counter++
+      })
     }
     return(lis)
   }
@@ -163,9 +168,13 @@ const Reception = () => {
   const renderDecorations = () => {
     const lis= []
     if (reception.decorations) {
-      reception.decorations.forEach((deco) => lis.push(<li key={`d${deco.id}`}>{deco.name} <button id={`d-${deco.id}`} onClick={handleDelete}>Delete</button> <button id={`de-${deco.id}`} value={deco.name} onClick={handleEdit}>Edit</button><p>
+      let counter = 0
+      reception.decorations.forEach((deco) => {
+        lis.push(<li key={`d${counter}`}>{deco.name} <button id={`d-${counter}`} onClick={handleDelete}>Delete</button> <button id={`de-${counter}`} value={deco.name} onClick={handleEdit}>Edit</button><p>
         you are planning to order {deco.amount} at a cost per unit of {deco.cost}$ for a total cost of {deco.total_cost}$
-      </p></li>))
+        </p></li>)
+        counter++
+      })
     }
     return(lis)
   }
@@ -173,13 +182,16 @@ const Reception = () => {
   const handleDelete = (event) => {
     const i = event.target.id.split('-')[1]
     const x = event.target.id.split('-')[0]
+    let theId
     let choice
     if (x === 'd') {
       choice = 'decorations'
+      theId = reception.decorations[i].id
     } else if (x === 'c') {
       choice = 'concessions'
+      theId = reception.concessions[i].id
     }
-    fetch(`/${choice}/${i}`, {
+    fetch(`/${choice}/${theId}`, {
       method: "DELETE"
     })
     .then(res => res.json())
@@ -195,7 +207,12 @@ const Reception = () => {
   const handleEdit = (event) => {
     const i = event.target.id.split('-')[1]
     const x = event.target.id.split('-')[0]
-    setEId(i)
+    setArrayIndex(i)
+    if (x === 'de') {
+      setEId(reception.decorations[i].id)
+    } else if (x === 'ce') {
+      setEId(reception.concessions[i].id)
+    }
     setEName(event.target.value)
     setPath(x)
     setUpdateForm(true)
@@ -223,13 +240,23 @@ const Reception = () => {
 
   const handleUpdate = (event) => {
     event.preventDefault()
-    const a = parseInt(eAmount)
-    const c = parseInt(eCost)
+    let a
+    let c
     let choice
     if (path === 'de') {
       choice = "decorations"
+      a = reception.decorations[arrayIndex].amount
+      c = reception.decorations[arrayIndex].cost
     } else if (path === 'ce') {
       choice = "concessions"
+      a = reception.concessions[arrayIndex].amount
+      c = reception.concessions[arrayIndex].cost
+    }
+    if (eAmount !== '') { 
+      a = parseInt(eAmount)
+    } 
+    if (eCost !== '') {
+      c = parseInt(eCost)
     }
     fetch(`/${choice}/${eId}`, {
       method: 'PATCH',
@@ -258,7 +285,7 @@ const Reception = () => {
     })
   }
 
-  const handleCancelUpdate = () => {
+  const handleCancelUpdate = () => { //closes update form for deco/food
     setUpdateForm(false)
     setEName('')
     setECost('')
@@ -267,13 +294,13 @@ const Reception = () => {
     setPath('')
   }
 
-  const handleRecepUpdate = () => {
+  const handleRecepUpdate = () => { //opens for to update reception information
     setRecepUpdate(true)
     setRTime(reception.time)
     setRLocation(reception.location)
   }
 
-  const renderRUpdate = () => {
+  const renderRUpdate = () => { //renders form to update reception
     if (recepUpdate === true) {
       return(
         <div>               

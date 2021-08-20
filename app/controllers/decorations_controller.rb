@@ -49,7 +49,7 @@ class DecorationsController < ApplicationController
     defaults = { reception_id: User.find(session[:user_id]).reception.id, total_cost: params[:amount]*params[:cost] }
     params.permit(:name, :cost, :amount).reverse_merge(defaults)
   end
-  
+
   def find_user
     User.find(session[:user_id])
   end
