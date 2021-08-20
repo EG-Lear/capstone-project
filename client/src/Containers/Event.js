@@ -30,7 +30,7 @@ const Event = ({user}) => {
     })
   }, [])
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => {// handles initial creation of event
     event.preventDefault()
     if (dateSelected === false) {
       fetch('/events', {
@@ -76,7 +76,7 @@ const Event = ({user}) => {
     }
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles change in initial form
     if (event.target.id === 'N') {
       setName(event.target.value)
     } else if (event.target.id === 'B') {
@@ -86,7 +86,7 @@ const Event = ({user}) => {
     }
   }
 
-  const handleSelect = (event) => {
+  const handleSelect = (event) => { //handles select on initial form
     // console.log(event.target.value)
     if (event.target.value === 'false') {
       setDateSelected(false)
@@ -218,12 +218,12 @@ const Event = ({user}) => {
     }
   }
 
-  const handleUpdate = (data) => {
+  const handleUpdate = (data) => {// handles update from event form
     setUpdateStatus(false)
     setEvent(data)
   }
 
-  if (eventStatus === true) {
+  if (eventStatus === true) { //conditional render of different elements
     return (
       <div>
         <h4>{event.name}</h4>

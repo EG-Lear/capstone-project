@@ -41,7 +41,7 @@ const Reception = () => {
     })
   }, [])
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles change of input fields 
     if (event.target.id === 'L') {
       setLocation(event.target.value)
     } else if (event.target.id === 'T') {
@@ -69,7 +69,7 @@ const Reception = () => {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { //handles submit of initial form
     event.preventDefault()
     fetch('/receptions',{
       method: "POST",
@@ -93,7 +93,7 @@ const Reception = () => {
     })
   }
 
-  const handleFood = (event) => {
+  const handleFood = (event) => { //handles creation of concession items
     event.preventDefault()
     const a = parseInt(fAmount)
     const c = parseInt(fCost)
@@ -122,7 +122,7 @@ const Reception = () => {
     })
   }
 
-  const handleDeco = (event) => {
+  const handleDeco = (event) => { //handles creation of decoration items
     event.preventDefault()
     const a = parseInt(dAmount)
     const c = parseInt(dCost)
@@ -151,7 +151,7 @@ const Reception = () => {
     })
   }
 
-  const renderFood = () => {
+  const renderFood = () => { //handles render of food items
     const lis = []
     if (reception.concessions) {
       let counter = 0
@@ -165,7 +165,7 @@ const Reception = () => {
     return(lis)
   }
 
-  const renderDecorations = () => {
+  const renderDecorations = () => { //handles render of decorations
     const lis= []
     if (reception.decorations) {
       let counter = 0
@@ -179,7 +179,7 @@ const Reception = () => {
     return(lis)
   }
 
-  const handleDelete = (event) => {
+  const handleDelete = (event) => { //handles delete of both concessions and decorations
     const i = event.target.id.split('-')[1]
     const x = event.target.id.split('-')[0]
     let theId
@@ -204,7 +204,7 @@ const Reception = () => {
     })
   }
 
-  const handleEdit = (event) => {
+  const handleEdit = (event) => { //prompts render of update form and loads necessary information
     const i = event.target.id.split('-')[1]
     const x = event.target.id.split('-')[0]
     setArrayIndex(i)
@@ -218,7 +218,7 @@ const Reception = () => {
     setUpdateForm(true)
   }
 
-  const renderUpdateForm = () => {
+  const renderUpdateForm = () => { //renders form to update food or decoration
     if (updateForm === true) {
       return(
         <div>
@@ -238,7 +238,7 @@ const Reception = () => {
     }
   }
 
-  const handleUpdate = (event) => {
+  const handleUpdate = (event) => { //handles update of food and decorations
     event.preventDefault()
     let a
     let c
@@ -322,7 +322,7 @@ const Reception = () => {
     }
   }
 
-  const handleRUpdate = (event) => {
+  const handleRUpdate = (event) => { //handles update of reception information
     event.preventDefault()
     fetch(`/receptions/${reception.id}`, {
       method: 'PATCH',
@@ -348,13 +348,13 @@ const Reception = () => {
     })
   }
 
-  const handleRUpdateCancel = () => {
+  const handleRUpdateCancel = () => { //prompts cancelling of reception information
     setRecepUpdate(false)
     setRTime('')
     setRLocation('')
   }
 
-  const renderInfo = () => {
+  const renderInfo = () => { //handles render of reception information
     let xCost = reception.total_cost
     if (xCost === null) {
       xCost = 0

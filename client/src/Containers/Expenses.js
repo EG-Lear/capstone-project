@@ -27,7 +27,7 @@ const Expenses = () => {
     })
   }, [])
 
-  const renderExpenses = () => {
+  const renderExpenses = () => { //renders expenses
     const lis = []
     if (expenses) {
       let counter = 0
@@ -39,7 +39,7 @@ const Expenses = () => {
     return(lis)
   }
   
-  const handleDelete = (event) => {
+  const handleDelete = (event) => { //handles delete of expenses
     const i = expenses[event.target.id].id
     fetch(`/expenses/${i}`, {
       method: "DELETE"
@@ -54,12 +54,12 @@ const Expenses = () => {
     })
   }
 
-  const handleEdit = (event) => {
+  const handleEdit = (event) => {// prompts update render
     setUpdateExpense(expenses[event.target.id])
     setUpdateStatus(true)
   }
 
-  const renderUpdate = () => {
+  const renderUpdate = () => { //renders update form
     if (updateStatus === false) {
       return(<div></div>)
     } else {
@@ -72,18 +72,18 @@ const Expenses = () => {
     }
   }
 
-  const handleUpdate = (data) => {
+  const handleUpdate = (data) => { //handles update from form
     setUpdateStatus(false)
     setUpdateExpense({})
     setExpenses(data)
   }
 
-  const handleClick = () => {
+  const handleClick = () => { //handles cancelling of update
     setUpdateStatus(false)
     setUpdateExpense({})
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles change on creation form
     if (event.target.id === 'expenseName') {
       setName(event.target.value)
     } else if (event.target.id === 'expenseCost') {
@@ -92,7 +92,7 @@ const Expenses = () => {
       setDescription(event.target.value)
     }
   }
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { //handles submit of creation form
     event.preventDefault()
     const xCost = parseInt(cost)
     fetch('/expenses',{

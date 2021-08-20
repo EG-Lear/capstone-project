@@ -8,7 +8,7 @@ const EventUpdateForm = ({ourEvent, update}) => {
   const [budget, setBudget] = useState('')
   const [name, setName] = useState('')
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles input fields
     if (event.target.id === 'UD') {
       setDate(event.target.value)
     } else if (event.target.id === 'UT') {
@@ -24,7 +24,7 @@ const EventUpdateForm = ({ourEvent, update}) => {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { //handles submit of form
     event.preventDefault()
     let uDate = ourEvent.date
     let uTime = ourEvent.time

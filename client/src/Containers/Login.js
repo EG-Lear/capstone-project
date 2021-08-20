@@ -4,7 +4,7 @@ const Login = ({loginUser}) => {
   const [userName, setUserName] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles input fields
     if (event.target.id === 'U') {
       setUserName(event.target.value)
     } else if (event.target.id === 'P') {
@@ -12,7 +12,7 @@ const Login = ({loginUser}) => {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { //handles login submit
     event.preventDefault()
     fetch('/login', {
       method: "POST",

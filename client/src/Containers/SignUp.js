@@ -6,7 +6,7 @@ const SignUp = ({loginUser}) => {
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles input fields
     if (event.target.id === 'U') {
       setUserName(event.target.value)
     } else if (event.target.id === 'P') {
@@ -16,7 +16,7 @@ const SignUp = ({loginUser}) => {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { //handles sign up request
     event.preventDefault()
     if (password === passwordConfirmation) {
       fetch('/signup', {

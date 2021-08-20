@@ -86,7 +86,7 @@ const Attendance = () => {
     }
   }
 
-  const handleUpdateChange = (event) => {
+  const handleUpdateChange = (event) => { //handles input fields for main form
     setUFamily(false)
     setUGroom(false)
     setUBride(false)

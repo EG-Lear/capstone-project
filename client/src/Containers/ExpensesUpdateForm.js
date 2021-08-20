@@ -5,7 +5,7 @@ const ExpensesUpdateForm = ({expense, update}) => {
   const [cost, setCost] = useState('')
   const [description, setDescription] = useState('')
 
-  const handleChange = (event) => {
+  const handleChange = (event) => { //handles change of input fields
     if (event.target.id === 'expenseUpdateName') {
       setName(event.target.value)
     } else if (event.target.id === 'expenseUpdateCost') {
@@ -14,7 +14,8 @@ const ExpensesUpdateForm = ({expense, update}) => {
       setDescription(event.target.value)
     }
   }
-  const handleSubmit = (event) => {
+
+  const handleSubmit = (event) => { //handles submit of form
     event.preventDefault()
     let xName = expense.name
     let xCost = expense.cost
@@ -27,8 +28,7 @@ const ExpensesUpdateForm = ({expense, update}) => {
     }
     if (description.length > 0) {
       xDescription = description
-    }
-    
+    }  
     fetch(`/expenses/${expense.id}`, {
       method: "PATCH",
       headers: {
