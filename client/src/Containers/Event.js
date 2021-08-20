@@ -96,7 +96,7 @@ const Event = ({user}) => {
     }
   }
 
-  const renderDateInput = () => {
+  const renderDateInput = () => { //renders field to set date
     if (dateSelected === true) {
       return(
         <div>
@@ -107,7 +107,7 @@ const Event = ({user}) => {
     }
   }
 
-  const renderDate = () => {
+  const renderDate = () => { //renders date/location
     let xDate = event.date
     let xLocation = event.location
     if (xDate === null) {
@@ -121,7 +121,7 @@ const Event = ({user}) => {
     )
   }
 
-  const renderAllCost = () => {
+  const renderAllCost = () => { //renders budget information
     let rCost
     if (event.reception) {
       rCost = event.reception.total_cost
@@ -136,7 +136,7 @@ const Event = ({user}) => {
     )
   }
 
-  const renderReceptionDate = () => {
+  const renderReceptionDate = () => { //renders reception information
     let rTime
     let rLocation
     if (event.reception) {
@@ -157,7 +157,7 @@ const Event = ({user}) => {
     )
   }
 
-  const renderPeople = () => {
+  const renderPeople = () => { //renders number of invited people
     let xCount 
     let xCapacity = event.venue_capacity
     if (event.attendance) {
@@ -200,8 +200,9 @@ const Event = ({user}) => {
     }
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = (data) => {
     setUpdateStatus(false)
+    setEvent(data)
   }
 
   if (eventStatus === true) {

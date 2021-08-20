@@ -21,11 +21,25 @@ class EventsController < ApplicationController
     end
   end
 
+  def update
+    event = Event.find(params[:id])
+    if event.nil?
+      render json: { errors: "Event not found" }
+    else
+      event.update(update_params)
+      render json: event
+    end
+  end
+
   private
 
   def event_params
     defaults = { user_id: session[:user_id], available_budget: params[:total_budget]}
     params.permit(:name, :total_budget, :date, :venue_capacity).reverse_merge(defaults)
+  end
+
+  def update_params
+    params.permit(:name, :total_budget, :date, :venue_capacity, :time, :location)
   end
 
   def find_user
