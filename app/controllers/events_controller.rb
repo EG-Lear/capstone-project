@@ -39,6 +39,12 @@ class EventsController < ApplicationController
   end
 
   def update_params
+    available = find_user.event.available_budget
+    if params[:total_budget].nil?
+      # do nothing
+    elsif params[:total_budget] > Event.find(params[:id]).total_budget
+      
+    end
     params.permit(:name, :total_budget, :date, :venue_capacity, :time, :location)
   end
 
