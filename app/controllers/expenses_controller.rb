@@ -20,12 +20,12 @@ class ExpensesController < ApplicationController
   end
 
   def update
-    expense = expense.find(params[:id])
-    expenses = find_expenses
+    expense = Expense.find(params[:id])
     if expense.nil?
       render json: { errors: "Expense not found" }
     else
-      expense.update(expenses_params)
+      expense.update(update_params)
+      expenses = find_expenses
       render json: expenses
     end
   end
@@ -47,6 +47,10 @@ class ExpensesController < ApplicationController
   def expenses_params
     defaults = { event_id: User.find(session[:user_id]).event.id }
     params.permit(:name, :cost, :description).reverse_merge(defaults)
+  end
+
+  def update_params
+    params.permit(:name, :cost, :description)
   end
 
   def calculate_expenses_cost

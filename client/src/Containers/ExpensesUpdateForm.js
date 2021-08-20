@@ -16,16 +16,28 @@ const ExpensesUpdateForm = ({expense, update}) => {
   }
   const handleSubmit = (event) => {
     event.preventDefault()
-    const xCost = parseInt(cost)
+    let xName = expense.name
+    let xCost = expense.cost
+    let xDescription = expense.description
+    if (name.length > 0) {
+      xName = name
+    }
+    if (cost.length > 0) {
+      xCost = parseInt(cost)
+    }
+    if (description.length > 0) {
+      xDescription = description
+    }
+    
     fetch(`/expenses/${expense.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: name,
+        name: xName,
         cost: xCost,
-        description: description
+        description: xDescription
       }) 
     })
     .then(res => res.json())
@@ -34,17 +46,13 @@ const ExpensesUpdateForm = ({expense, update}) => {
         alert(data.errors)
       } else {
         update(data)
-        setName('')
-        setCost('')
-        setDescription('')
       }
     })
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <h4>Editing</h4>
-      <p>{expense.name}</p>
+      <h4>Editing {expense.name}</h4>
       <label>Name: </label>
       <input id={'expenseUpdateName'} value={name} onChange={handleChange}></input>
       <br/>
