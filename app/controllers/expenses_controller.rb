@@ -32,7 +32,7 @@ class ExpensesController < ApplicationController
 
   private
 
-  def reception_params
+  def expenses_params
     defaults = { event_id: User.find(session[:user_id]).event.id }
     params.permit(:name, :cost, :description).reverse_merge(defaults)
   end
