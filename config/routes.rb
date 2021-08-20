@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   post "/login", to: "sessions#create"
 
   resources :events, only: [:show, :create, :index, :update]
-  resources :receptions, only: [:show, :index, :create, :update] do
+  resources :receptions, only: [:index, :create, :update] do
     resources :concessions, only: [:create]
     resources :decorations, only: [:create]
   end
@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     resources :guests, only: [:create, :index]
   end
   resources :guests, only: [:update, :destroy]
+
+  resources :expenses, only: [:index, :create, :update, :destroy]
 
   # Routing logic: fallback requests for React Router.
   # Leave this here to help deploy your app later!

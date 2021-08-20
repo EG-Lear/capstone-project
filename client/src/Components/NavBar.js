@@ -16,6 +16,7 @@ const NavBar = ({loggedIn, logout}) => {
         <NavLink className='App-link' to='/'>Home</NavLink>
         <NavLink className='App-link' to='/receptions'>Reception</NavLink>
         <NavLink className='App-link' to='/attendances'>Guest-List</NavLink>
+        <NavLink className='App-link' to='/expenses'>Expenses</NavLink>
         <button onClick={logout}>Log Out</button>
       </div>
     )

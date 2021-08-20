@@ -6,6 +6,7 @@ import Home from './Components/Home'
 import SignUp from './Containers/SignUp'
 import Reception from './Containers/Reception'
 import Attendance from './Containers/Attendance'
+import Expenses from './Containers/Expenses'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -60,6 +61,7 @@ function App() {
         <Route exact path='/signup' render={() => <SignUp loginUser={loginUser}/>}/>
         <Route exact path='/receptions' render={() => <Reception />} />
         <Route exact path='/attendances' render={() => <Attendance />} />
+        <Route exact path='/expenses' render={() => <Expenses />} />
       </Switch>
     </div>
   )
