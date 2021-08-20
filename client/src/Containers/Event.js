@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import EventUpdateForm from './EventUpdateForm'
 
 const Event = ({user}) => {
   const [event, setEvent] = useState({})
@@ -192,9 +193,7 @@ const Event = ({user}) => {
     } else {
       return (
         <div>
-          <form>
-
-          </form>
+          <EventUpdateForm event={event}/>
           <button onClick={handleClick}>Cancel</button>
         </div>
       )
