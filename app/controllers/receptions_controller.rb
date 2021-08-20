@@ -20,11 +20,15 @@ class ReceptionsController < ApplicationController
 
   def update
     reception = Reception.find(params[:id])
-    if reception.nil?
+    if reception.nil?  
       render json: { errors: "Reception not found" }
     else
-      reception.update(reception_params)
-      render json: reception
+      if reception.valid?
+        reception.update(reception_params)
+        render json: reception
+      else
+        render json: { errors: reception.errors.full_messages }
+      end
     end
   end
 

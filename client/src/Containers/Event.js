@@ -194,7 +194,7 @@ const Event = ({user}) => {
     )
   }
   
-  const handleClick = () => {
+  const handleClick = () => { //prompts render or de-render of update form
     if (updateStatus === false) {
       setUpdateStatus(true)
     } else {
@@ -202,7 +202,7 @@ const Event = ({user}) => {
     }
   }
 
-  const renderUpdate = () => {
+  const renderUpdate = () => { //renders update form
     if (updateStatus === false) {
 
       return (

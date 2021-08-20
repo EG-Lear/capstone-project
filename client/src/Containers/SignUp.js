@@ -50,10 +50,10 @@ const SignUp = ({loginUser}) => {
         <input id='U' value={userName} onChange={handleChange}></input>
         <br/>
         <label>Password: </label>
-        <input id='P' value={password} onChange={handleChange}></input>
+        <input id='P' type='password' value={password} onChange={handleChange}></input>
         <br/>
         <label>Confirm Password: </label>
-        <input id='PC' value={passwordConfirmation} onChange={handleChange}></input>
+        <input id='PC' type='password' value={passwordConfirmation} onChange={handleChange}></input>
         <br/>
         <br/>
         <button>Sign up</button>

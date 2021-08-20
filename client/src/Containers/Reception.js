@@ -281,6 +281,7 @@ const Reception = () => {
         setEAmount('')
         setEId('')
         setPath('')
+        setArrayIndex('')
       }
     })
   }
@@ -292,6 +293,7 @@ const Reception = () => {
     setEAmount('')
     setEId('')
     setPath('')
+    setArrayIndex('')
   }
 
   const handleRecepUpdate = () => { //opens for to update reception information
