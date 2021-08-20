@@ -193,11 +193,15 @@ const Event = ({user}) => {
     } else {
       return (
         <div>
-          <EventUpdateForm event={event}/>
+          <EventUpdateForm ourEvent={event} update={handleUpdate}/>
           <button onClick={handleClick}>Cancel</button>
         </div>
       )
     }
+  }
+
+  const handleUpdate = () => {
+    setUpdateStatus(false)
   }
 
   if (eventStatus === true) {

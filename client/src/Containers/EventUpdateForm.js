@@ -1,37 +1,86 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
-const EventUpdateForm = ({event}) => {
+const EventUpdateForm = ({ourEvent, update}) => {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [location, setLocation] = useState('')
   const [capacity, setCapacity] = useState('')
-  const [budget, setBudget] = useState(event.total_budget)
+  const [budget, setBudget] = useState('')
 
-  const handleSubmit = () => {
-    
+  const handleChange = (event) => {
+    if (event.target.id === 'UD') {
+      setDate(event.target.value)
+    } else if (event.target.id === 'UT') {
+      setTime(event.target.value)
+    } else if (event.target.id === 'UL') {
+      setLocation(event.target.value)
+    } else if (event.target.id === 'UC') {
+      setCapacity(event.target.value)
+    } else if (event.target.id === 'UB') {
+      setBudget(event.target.value)
+    } 
   }
 
-  const handleChange = () => {
-
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    let uDate = ourEvent.date
+    let uTime = ourEvent.time
+    let uLocation = ourEvent.location
+    let uCapacity = ourEvent.venue_capacity
+    let uBudget = ourEvent.total_budget
+    if (date.length > 0) {
+      uDate = date
+    }
+    if ( time.length > 0) {
+      uTime = time
+    }
+    if ( location.length > 0) {
+      uLocation = location
+    }
+    if ( capacity.length > 0) {
+      uCapacity = capacity
+    }
+    if ( budget.length > 0) {
+      uBudget = budget
+    }
+    fetch(`/events/${ourEvent.id}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        date: uDate,
+        time: uTime,
+        location: uLocation,
+        venue_capacity: uCapacity,
+        total_budget: uBudget
+      })
+    })
+    // update()
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <p>Changing Event Information</p>
       <label>Date: </label>
-      <input value={date} onChange={handleChange}></input>
+      <input id={'UD'} value={date} onChange={handleChange}></input>
+      <label> Currently {ourEvent.date}</label>
       <br/>
       <label>Time: </label>
-      <input value={time} onChange={handleChange}></input>
+      <input id={'UT'} value={time} onChange={handleChange}></input>
+      <label> Currently {ourEvent.time}</label>
       <br/>
       <label>Location: </label>
-      <input value={location} onChange={handleChange}></input>
+      <input id={'UL'} value={location} onChange={handleChange}></input>
+      <label> Currently {ourEvent.location}</label>
       <br/>
       <label>Max Capacity: </label>
-      <input value={capacity} onChange={handleChange}></input>
+      <input id={'UC'} value={capacity} onChange={handleChange}></input>
+      <label> Currently {ourEvent.venue_capacity}</label>
       <br/>
       <label>Total Budget: </label>
-      <input value={budget} onChange={handleChange}></input>
+      <input id={'UB'} value={budget} onChange={handleChange}></input>
+      <label> Currently {ourEvent.total_budget}$</label>
       <br/>
       <button>Make Changes</button>
     </form>
