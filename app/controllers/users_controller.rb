@@ -22,8 +22,4 @@ class UsersController < ApplicationController
   def user_params
     params.permit(:username, :password, :password_confirmation)
   end
-
-  def record_not_found
-    render json: { errors: "User not logged in" }, status: :unauthorized
-  end
 end
