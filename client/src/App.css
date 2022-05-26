@@ -45,6 +45,11 @@
   list-style-position: inside;
 }
 
+input {
+  border: none;
+  border-bottom: 2px solid rgb(2, 131, 218);
+}
+
 .Resize {
   max-width: 5%;
   max-height: 5%;
