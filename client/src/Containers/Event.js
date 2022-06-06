@@ -9,6 +9,7 @@ const Event = ({user}) => {
   const [dateSelected, setDateSelected] = useState(false)
   const [date, setDate] = useState('')
   const [updateStatus, setUpdateStatus] = useState(false)
+  const [counter, setCounter] = useState(0)
 
   useEffect(() => {
     fetch('/events')
@@ -223,6 +224,14 @@ const Event = ({user}) => {
     setEvent(data)
   }
 
+  const handleIncrease = () => {// increases counter by 1
+    setCounter(counter + 1)
+  }
+
+  const handleDecrease = () => {// decreases counter by 1
+    setCounter(counter - 1)
+  }
+
   if (eventStatus === true) { //conditional render of different elements
     return (
       <div>
@@ -233,6 +242,8 @@ const Event = ({user}) => {
         {renderAllCost()}
         {renderReceptionDate()}
         {renderUpdate()}
+        <p>This is a random counter, you can increase or decrease it's count using the buttons below {counter}</p>
+        <button onClick={handleIncrease}>Plus 1</button> <button onClick={handleDecrease}>Minus 1</button>
       </div>
     )
   } else {
